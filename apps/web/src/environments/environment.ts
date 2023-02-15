@@ -3,4 +3,8 @@
 
 export const environment = {
   production: false,
+  auth0: {
+    domain: 'booking-app-dev.eu.auth0.com',
+    clientId: 'EOz9IkVaOik8Dy1x2AIrSKouWYwtitYy',
+  },
 };
