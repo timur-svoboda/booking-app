@@ -1,6 +1,6 @@
 import { Container, Flex } from '@chakra-ui/layout';
 import { Box } from '@chakra-ui/react';
-import SignUpButton from './sign-up-button';
+import { SignUpButton } from '@booking-app/web/auth';
 
 /* eslint-disable-next-line */
 export interface AppBarProps {}
