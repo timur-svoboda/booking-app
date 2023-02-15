@@ -2,14 +2,12 @@
 import styles from './app.module.scss';
 
 import { Route, Routes, Link } from 'react-router-dom';
+import { AppBar } from '@booking-app/web/app-bar';
 
 export function App() {
   return (
     <>
-      <h1>
-        <span> Hello there, </span>
-        Welcome web 👋
-      </h1>
+      <AppBar />
 
       <div />
     </>
