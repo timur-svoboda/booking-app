@@ -8,6 +8,9 @@ export class StaysController {
 
   @Post()
   create(@Body() createStayDto: CreateStayDto) {
-    return this.staysService.create(createStayDto);
+    return this.staysService.create({
+      ownerId: 'github|39482339',
+      ...createStayDto,
+    });
   }
 }
