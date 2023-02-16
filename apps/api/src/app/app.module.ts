@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
+import { StaysModule } from '@booking-app/api/stays';
 
 @Module({
-  imports: [],
+  imports: [StaysModule],
   controllers: [],
   providers: [],
 })
