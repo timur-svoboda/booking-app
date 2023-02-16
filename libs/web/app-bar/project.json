@@ -1,0 +1,16 @@
+{
+  "name": "web-app-bar",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/app-bar/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/app-bar/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}
