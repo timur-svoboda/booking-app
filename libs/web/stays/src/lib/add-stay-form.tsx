@@ -10,6 +10,7 @@ import {
   Textarea,
   VStack,
 } from '@chakra-ui/react';
+import StayApi from './stay-api';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -18,10 +19,10 @@ export function AddStayForm(props: AddStayFormProps) {
   const [title, setTitle] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
 
-  const onSubmit: React.FormEventHandler = (event) => {
+  const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
 
-    console.log(title, description);
+    await StayApi.create({ title, description });
 
     setTitle('');
     setDescription('');
