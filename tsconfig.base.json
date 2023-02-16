@@ -16,7 +16,8 @@
     "baseUrl": ".",
     "paths": {
       "@booking-app/web/app-bar": ["libs/web/app-bar/src/index.ts"],
-      "@booking-app/web/auth": ["libs/web/auth/src/index.ts"]
+      "@booking-app/web/auth": ["libs/web/auth/src/index.ts"],
+      "@booking-app/web/stays": ["libs/web/stays/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
