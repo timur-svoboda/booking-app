@@ -5,6 +5,7 @@ import { Auth0Provider, AppState } from '@auth0/auth0-react';
 export interface AuthProviderProps {
   domain: string;
   clientId: string;
+  audience: string;
   children: React.ReactNode;
 }
 
@@ -21,6 +22,7 @@ export function AuthProvider(props: AuthProviderProps) {
       clientId={props.clientId}
       authorizationParams={{
         redirect_uri: window.location.origin,
+        audience: props.audience,
       }}
       onRedirectCallback={onRedirectCallback}
     >

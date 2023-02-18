@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@booking-app/api/auth": ["libs/api/auth/src/index.ts"],
       "@booking-app/api/stays": ["libs/api/stays/src/index.ts"],
       "@booking-app/web/app-bar": ["libs/web/app-bar/src/index.ts"],
       "@booking-app/web/auth": ["libs/web/auth/src/index.ts"],

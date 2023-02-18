@@ -11,18 +11,23 @@ import {
   VStack,
 } from '@chakra-ui/react';
 import StayApi from './stay-api';
+import { useAuth0 } from '@auth0/auth0-react';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
 
 export function AddStayForm(props: AddStayFormProps) {
+  const { getAccessTokenSilently } = useAuth0();
+
   const [title, setTitle] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
 
   const onSubmit: React.FormEventHandler = async (event) => {
     event.preventDefault();
 
-    await StayApi.create({ title, description });
+    const accessToken = await getAccessTokenSilently();
+
+    await StayApi.create({ title, description }, accessToken);
 
     setTitle('');
     setDescription('');
