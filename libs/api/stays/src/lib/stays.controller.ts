@@ -1,5 +1,5 @@
 import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
-import { JwtAuthGuard } from '@booking-app/api/auth';
+import { JwtAuthGuard, UserId } from '@booking-app/api/auth';
 import { StaysService } from './stays.service';
 import { CreateStayDto } from './dto/create-stay.dto';
 import { StayDto } from './dto/stay.dto';
@@ -10,9 +10,9 @@ export class StaysController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Req() req: any, @Body() createStayDto: CreateStayDto) {
+  async create(@UserId() userId: string, @Body() createStayDto: CreateStayDto) {
     const stayDoc = await this.staysService.create({
-      ownerId: 'github|39482339',
+      ownerId: userId,
       ...createStayDto,
     });
 
