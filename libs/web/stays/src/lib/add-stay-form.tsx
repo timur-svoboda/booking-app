@@ -13,11 +13,13 @@ import {
 } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
 import StayApi from './stay-api';
 import { BadRequestException } from './types/bad-request-exception';
 import { HttpException } from './types/http-exception';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { FormData } from './types/form-data';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -27,33 +29,26 @@ export function AddStayForm(props: AddStayFormProps) {
 
   const navigate = useNavigate();
 
-  const [title, setTitle] = React.useState<string>('');
-  const [description, setDescription] = React.useState<string>('');
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    setError,
+    formState: { errors },
+  } = useForm<FormData>({
+    reValidateMode: 'onSubmit',
+  });
 
   const [loading, setLoading] = React.useState<boolean>(false);
-  const [titleError, setTitleError] = React.useState<string[] | null>(null);
-  const [descriptionError, setDescriptionError] = React.useState<
-    string[] | null
-  >(null);
 
-  const onSubmit: React.FormEventHandler = async (event) => {
-    event.preventDefault();
-
+  const onSubmit = handleSubmit(async (data) => {
     const accessToken = await getAccessTokenSilently();
-
     setLoading(true);
+    clearErrors();
 
     try {
-      await StayApi.create({ title, description }, accessToken);
-
-      setTitle('');
-      setDescription('');
-
-      setTitleError(null);
-      setDescriptionError(null);
-
+      await StayApi.create(data, accessToken);
       toast.success('Stay is created');
-
       navigate('/');
     } catch (error: unknown) {
       let unknownError = true;
@@ -69,15 +64,11 @@ export function AddStayForm(props: AddStayFormProps) {
             const { title, description } = badRequestException.message;
 
             if (title && title.length > 0) {
-              setTitleError(title);
-            } else {
-              setTitleError(null);
+              setError('title', { message: title[0] });
             }
 
             if (description && description.length > 0) {
-              setDescriptionError(description);
-            } else {
-              setDescriptionError(null);
+              setError('description', { message: description[0] });
             }
           }
         }
@@ -89,7 +80,7 @@ export function AddStayForm(props: AddStayFormProps) {
     }
 
     setLoading(false);
-  };
+  });
 
   return (
     <Box as="form" onSubmit={onSubmit}>
@@ -98,26 +89,29 @@ export function AddStayForm(props: AddStayFormProps) {
       </Heading>
 
       <VStack spacing={4} mb={6}>
-        <FormControl isInvalid={titleError !== null} isDisabled={loading}>
+        <FormControl
+          isInvalid={errors.title !== undefined}
+          isDisabled={loading}
+        >
           <FormLabel>Title</FormLabel>
           <Input
-            name="title" // It disables Chrome Password Manager
             type="text"
             placeholder="My Awesome Hotel"
-            value={title}
-            onChange={(event) => setTitle(event.target.value)}
+            {...register('title')}
           />
-          <FormErrorMessage>{titleError}</FormErrorMessage>
+          <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
         </FormControl>
 
-        <FormControl isInvalid={descriptionError !== null} isDisabled={loading}>
+        <FormControl
+          isInvalid={errors.description !== undefined}
+          isDisabled={loading}
+        >
           <FormLabel>Description</FormLabel>
           <Textarea
             placeholder="Description of My Awesome Hotel"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
+            {...register('description')}
           />
-          <FormErrorMessage>{descriptionError}</FormErrorMessage>
+          <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
         </FormControl>
       </VStack>
 
