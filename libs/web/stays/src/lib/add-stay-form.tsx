@@ -12,14 +12,12 @@ import {
   FormErrorMessage,
 } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import StayApi from './stay-api';
-import { BadRequestException } from './types/bad-request-exception';
-import { HttpException } from './types/http-exception';
 import { FormData } from './types/form-data';
+import { hasValidationErrors } from './has-validation-errors';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -51,30 +49,13 @@ export function AddStayForm(props: AddStayFormProps) {
       toast.success('Stay is created');
       navigate('/');
     } catch (error: unknown) {
-      let unknownError = true;
-
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          const httpException: HttpException = error.response.data;
-
-          if (httpException.statusCode === 400) {
-            unknownError = false;
-
-            const badRequestException = httpException as BadRequestException;
-            const { title, description } = badRequestException.message;
-
-            if (title && title.length > 0) {
-              setError('title', { message: title[0] });
-            }
-
-            if (description && description.length > 0) {
-              setError('description', { message: description[0] });
-            }
-          }
-        }
-      }
-
-      if (unknownError) {
+      if (hasValidationErrors(error, new FormData())) {
+        error.response.data.message.forEach((error) => {
+          Object.values(error.constraints).forEach((constraint) => {
+            setError(error.property, { message: constraint });
+          });
+        });
+      } else {
         toast.error('Unknown error. Try again');
       }
     }

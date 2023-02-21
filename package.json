@@ -21,6 +21,7 @@
     "class-validator": "0.14.0",
     "core-js": "3.28.0",
     "framer-motion": "9.0.2",
+    "joi": "17.8.3",
     "jwks-rsa": "3.0.1",
     "mongoose": "6.9.1",
     "passport": "0.6.0",
