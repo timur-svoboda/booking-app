@@ -6,7 +6,7 @@ export type StayDocument = HydratedDocument<Stay>;
 @Schema()
 export class Stay {
   @Prop({ required: true })
-  ownerId!: string;
+  hostId!: string;
 
   @Prop({ required: true })
   title!: string;

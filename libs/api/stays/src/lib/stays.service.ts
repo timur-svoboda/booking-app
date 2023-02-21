@@ -8,7 +8,7 @@ import { Stay, StayDocument } from './schemas/stay.schema';
 export class StaysService {
   constructor(@InjectModel(Stay.name) private catModel: Model<StayDocument>) {}
 
-  create(data: CreateStayDto & { ownerId: string }) {
+  create(data: CreateStayDto & { hostId: string }) {
     return this.catModel.create(data);
   }
 }

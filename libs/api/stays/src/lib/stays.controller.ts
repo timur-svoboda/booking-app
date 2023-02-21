@@ -12,7 +12,7 @@ export class StaysController {
   @Post()
   async create(@UserId() userId: string, @Body() createStayDto: CreateStayDto) {
     const stayDoc = await this.staysService.create({
-      ownerId: userId,
+      hostId: userId,
       ...createStayDto,
     });
 
