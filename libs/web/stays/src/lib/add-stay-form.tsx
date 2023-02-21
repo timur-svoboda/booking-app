@@ -11,8 +11,11 @@ import {
   VStack,
   FormErrorMessage,
 } from '@chakra-ui/react';
-import StayApi from './stay-api';
 import { useAuth0 } from '@auth0/auth0-react';
+import { AxiosError } from 'axios';
+import StayApi from './stay-api';
+import { BadRequestException } from './types/bad-request-exception';
+import { HttpException } from './types/http-exception';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -44,19 +47,28 @@ export function AddStayForm(props: AddStayFormProps) {
 
       setTitleError(null);
       setDescriptionError(null);
-    } catch (error: any) {
-      const { title, description } = error.response.data.message;
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        if (error.response) {
+          const httpException: HttpException = error.response.data;
 
-      if (title && title.length > 0) {
-        setTitleError(title);
-      } else {
-        setTitleError(null);
-      }
+          if (httpException.statusCode === 400) {
+            const badRequestException = httpException as BadRequestException;
+            const { title, description } = badRequestException.message;
 
-      if (description && description.length > 0) {
-        setDescriptionError(description);
-      } else {
-        setDescriptionError(null);
+            if (title && title.length > 0) {
+              setTitleError(title);
+            } else {
+              setTitleError(null);
+            }
+
+            if (description && description.length > 0) {
+              setDescriptionError(description);
+            } else {
+              setDescriptionError(null);
+            }
+          }
+        }
       }
     }
 
