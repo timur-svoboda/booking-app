@@ -2,6 +2,8 @@
 import styles from './app.module.scss';
 
 import { Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { AppBar } from '@booking-app/web/app-bar';
 import { AddStayPage } from '@booking-app/web/stays';
 import { AuthRequired } from '@booking-app/web/auth';
@@ -18,6 +20,8 @@ export function App() {
           </Route>
         </Route>
       </Routes>
+
+      <ToastContainer />
     </>
   );
 }

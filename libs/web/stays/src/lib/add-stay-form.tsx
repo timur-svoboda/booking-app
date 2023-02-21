@@ -17,6 +17,7 @@ import StayApi from './stay-api';
 import { BadRequestException } from './types/bad-request-exception';
 import { HttpException } from './types/http-exception';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -50,6 +51,8 @@ export function AddStayForm(props: AddStayFormProps) {
 
       setTitleError(null);
       setDescriptionError(null);
+
+      toast.success('Stay is created');
 
       navigate('/');
     } catch (error: unknown) {
