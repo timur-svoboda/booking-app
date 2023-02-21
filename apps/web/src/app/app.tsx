@@ -21,7 +21,7 @@ export function App() {
         </Route>
       </Routes>
 
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
     </>
   );
 }
