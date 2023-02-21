@@ -56,11 +56,15 @@ export function AddStayForm(props: AddStayFormProps) {
 
       navigate('/');
     } catch (error: unknown) {
+      let unknownError = true;
+
       if (error instanceof AxiosError) {
         if (error.response) {
           const httpException: HttpException = error.response.data;
 
           if (httpException.statusCode === 400) {
+            unknownError = false;
+
             const badRequestException = httpException as BadRequestException;
             const { title, description } = badRequestException.message;
 
@@ -77,6 +81,10 @@ export function AddStayForm(props: AddStayFormProps) {
             }
           }
         }
+      }
+
+      if (unknownError) {
+        toast.error('Unknown error. Try again');
       }
     }
 
