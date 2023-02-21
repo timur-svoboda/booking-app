@@ -16,12 +16,15 @@ import { AxiosError } from 'axios';
 import StayApi from './stay-api';
 import { BadRequestException } from './types/bad-request-exception';
 import { HttpException } from './types/http-exception';
+import { useNavigate } from 'react-router-dom';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
 
 export function AddStayForm(props: AddStayFormProps) {
   const { getAccessTokenSilently } = useAuth0();
+
+  const navigate = useNavigate();
 
   const [title, setTitle] = React.useState<string>('');
   const [description, setDescription] = React.useState<string>('');
@@ -47,6 +50,8 @@ export function AddStayForm(props: AddStayFormProps) {
 
       setTitleError(null);
       setDescriptionError(null);
+
+      navigate('/');
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response) {
