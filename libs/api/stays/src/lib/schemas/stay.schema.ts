@@ -6,13 +6,13 @@ export type StayDocument = HydratedDocument<Stay>;
 @Schema()
 export class Stay {
   @Prop({ required: true })
-  hostId!: string;
+  hostId: string;
 
   @Prop({ required: true })
-  title!: string;
+  title: string;
 
   @Prop({ required: true })
-  description!: string;
+  description: string;
 }
 
 export const StaySchema = SchemaFactory.createForClass(Stay);

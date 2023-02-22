@@ -1,6 +1,7 @@
 import { StayDocument } from '../schemas/stay.schema';
+import { StayDto as IStayDto } from '@booking-app/shared/dtos';
 
-export class StayDto {
+export class StayDto implements IStayDto {
   id: string;
   hostId: string;
   title: string;
