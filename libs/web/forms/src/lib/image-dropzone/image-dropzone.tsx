@@ -1,22 +1,33 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useToken, Box, Center, Text } from '@chakra-ui/react';
+import { FileWithPreview } from './file-with-preview';
 import Thumbnail from './thumbnail';
 
 /* eslint-disable-next-line */
 export interface ImageDropzoneProps {}
 
 export function ImageDropzone(props: ImageDropzoneProps) {
-  const [files, setFiles] = React.useState<File[]>([]);
+  const [files, setFiles] = React.useState<FileWithPreview[]>([]);
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
       accept: { 'image/*': [] },
       maxFiles: 10,
       onDrop: (acceptedFiles) => {
-        setFiles([...files, ...acceptedFiles]);
+        const filesWithPreviews = acceptedFiles.map((file) => {
+          return Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          });
+        });
+
+        setFiles([...files, ...filesWithPreviews]);
       },
     });
+
+  React.useEffect(() => {
+    return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
+  }, []);
 
   const [red500, blue500] = useToken('colors', ['red.500', 'blue.500']);
 
@@ -56,8 +67,8 @@ export function ImageDropzone(props: ImageDropzoneProps) {
       </Box>
       <Box as="aside">
         {files.map((file) => (
-          <Box mb={4}>
-            <Thumbnail />
+          <Box mb={4} key={file.preview}>
+            <Thumbnail file={file} />
           </Box>
         ))}
       </Box>
