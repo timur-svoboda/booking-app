@@ -16,7 +16,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { ValidationErrors } from '@booking-app/web/forms';
+import { ImageDropzone, ValidationErrors } from '@booking-app/web/forms';
 import StayApi from './stay-api';
 import { FormData } from './types/form-data';
 
@@ -81,6 +81,11 @@ export function AddStayForm(props: AddStayFormProps) {
             {...register('title')}
           />
           <FormErrorMessage>{errors.title?.message}</FormErrorMessage>
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Images</FormLabel>
+          <ImageDropzone />
         </FormControl>
 
         <FormControl
