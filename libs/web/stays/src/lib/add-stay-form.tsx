@@ -16,7 +16,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { setValidationErrors } from '@booking-app/web/forms';
+import { ValidationErrors } from '@booking-app/web/forms';
 import StayApi from './stay-api';
 import { FormData } from './types/form-data';
 
@@ -37,6 +37,9 @@ export function AddStayForm(props: AddStayFormProps) {
   } = useForm<FormData>({
     reValidateMode: 'onSubmit',
   });
+  const validationErrorsRef = React.useRef(
+    new ValidationErrors(FormData, setError)
+  );
 
   const [loading, setLoading] = React.useState<boolean>(false);
 
@@ -49,8 +52,10 @@ export function AddStayForm(props: AddStayFormProps) {
       await StayApi.create(data, accessToken);
       toast.success('Stay is created');
       navigate('/');
-    } catch (error: unknown) {
-      if (!setValidationErrors(error, FormData, setError)) {
+    } catch (errors: unknown) {
+      if (validationErrorsRef.current.validateErrors(errors)) {
+        validationErrorsRef.current.setErrors(errors);
+      } else {
         toast.error('Unknown error. Try again');
       }
     }

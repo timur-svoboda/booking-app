@@ -1,1 +1,1 @@
-export * from './lib/set-validation-errors';
+export * from './lib/validation-errors';
