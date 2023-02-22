@@ -1,6 +1,7 @@
 import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import { useToken, Box, Center, Text } from '@chakra-ui/react';
+import Thumbnail from './thumbnail';
 
 /* eslint-disable-next-line */
 export interface ImageDropzoneProps {}
@@ -35,10 +36,8 @@ export function ImageDropzone(props: ImageDropzoneProps) {
     <Box as="section">
       <Box
         {...getRootProps()}
-        pt={2}
-        pr={4}
-        pb={2}
-        pl={4}
+        padding="8px 16px"
+        mb={4}
         height="20"
         borderWidth={1}
         borderStyle="solid"
@@ -57,7 +56,9 @@ export function ImageDropzone(props: ImageDropzoneProps) {
       </Box>
       <Box as="aside">
         {files.map((file) => (
-          <p>{file.name}</p>
+          <Box mb={4}>
+            <Thumbnail />
+          </Box>
         ))}
       </Box>
     </Box>
