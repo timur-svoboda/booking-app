@@ -1,0 +1,16 @@
+{
+  "name": "web-forms",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/web/forms/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/web/forms/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}

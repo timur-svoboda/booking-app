@@ -15,9 +15,9 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { setValidationErrors } from '@booking-app/web/forms';
 import StayApi from './stay-api';
 import { FormData } from './types/form-data';
-import { hasValidationErrors } from './has-validation-errors';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -49,13 +49,7 @@ export function AddStayForm(props: AddStayFormProps) {
       toast.success('Stay is created');
       navigate('/');
     } catch (error: unknown) {
-      if (hasValidationErrors(error, new FormData())) {
-        error.response.data.message.forEach((error) => {
-          Object.values(error.constraints).forEach((constraint) => {
-            setError(error.property, { message: constraint });
-          });
-        });
-      } else {
+      if (!setValidationErrors(error, FormData, setError)) {
         toast.error('Unknown error. Try again');
       }
     }

@@ -1,8 +1,8 @@
 import Joi from 'joi';
-import { FieldValues } from 'react-hook-form';
+import { FieldValues, Path, UseFormSetError } from 'react-hook-form';
 
 type ValidationError<TFieldValues extends FieldValues = FieldValues> = {
-  property: keyof TFieldValues;
+  property: Path<TFieldValues>;
   constraints: {
     [type: string]: string;
   };
@@ -16,12 +16,10 @@ type HasValidationErrors<TFieldValues extends FieldValues = FieldValues> = {
   };
 };
 
-export const hasValidationErrors = <
-  TFieldValues extends FieldValues = FieldValues
->(
-  value: unknown,
+const hasValidationErrors = <TFieldValues extends FieldValues = FieldValues>(
+  error: unknown,
   formData: TFieldValues
-): value is HasValidationErrors<TFieldValues> => {
+): error is HasValidationErrors<TFieldValues> => {
   const schema = Joi.object({
     response: Joi.object({
       data: Joi.object({
@@ -41,7 +39,25 @@ export const hasValidationErrors = <
     }).unknown(),
   }).unknown();
 
-  const result = schema.validate(value);
+  const result = schema.validate(error);
 
   return result.error === undefined;
+};
+
+export const setValidationErrors = <
+  TFieldValues extends FieldValues = FieldValues
+>(
+  error: unknown,
+  FormData: new () => TFieldValues,
+  setError: UseFormSetError<TFieldValues>
+) => {
+  if (!hasValidationErrors(error, new FormData())) return false;
+
+  error.response.data.message.forEach((err) => {
+    Object.values(err.constraints).forEach((constraint) => {
+      setError(err.property, { message: constraint });
+    });
+  });
+
+  return true;
 };
