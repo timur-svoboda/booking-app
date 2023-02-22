@@ -11,6 +11,7 @@ import {
   VStack,
   FormErrorMessage,
 } from '@chakra-ui/react';
+import TextareaAutosize from 'react-textarea-autosize';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -84,6 +85,9 @@ export function AddStayForm(props: AddStayFormProps) {
           <FormLabel>Description</FormLabel>
           <Textarea
             placeholder="Description of My Awesome Hotel"
+            resize="none"
+            minRows={5}
+            as={TextareaAutosize}
             {...register('description')}
           />
           <FormErrorMessage>{errors.description?.message}</FormErrorMessage>
