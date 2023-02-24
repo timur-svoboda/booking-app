@@ -37,7 +37,7 @@ export class StaysController {
   @Permissions('create:stays')
   @UseInterceptors(FileInterceptor('file'))
   @Post('thumbnails')
-  async createThumbnail(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
+  createThumbnail(@UploadedFile() file: Express.Multer.File) {
+    return this.staysService.createThumbnail(file);
   }
 }
