@@ -16,6 +16,7 @@
     "baseUrl": ".",
     "paths": {
       "@booking-app/api/auth": ["libs/api/auth/src/index.ts"],
+      "@booking-app/api/cloud-storage": ["libs/api/cloud-storage/src/index.ts"],
       "@booking-app/api/stays": ["libs/api/stays/src/index.ts"],
       "@booking-app/api/validation": ["libs/api/validation/src/index.ts"],
       "@booking-app/shared/dtos": ["libs/shared/dtos/src/index.ts"],
