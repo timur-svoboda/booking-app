@@ -34,6 +34,7 @@ export function AddStayForm(props: AddStayFormProps) {
     clearErrors,
     setError,
     formState: { errors },
+    control,
   } = useForm<FormData>({
     reValidateMode: 'onSubmit',
   });
@@ -44,6 +45,7 @@ export function AddStayForm(props: AddStayFormProps) {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
     const accessToken = await getAccessTokenSilently();
     setLoading(true);
     clearErrors();
@@ -85,7 +87,7 @@ export function AddStayForm(props: AddStayFormProps) {
 
         <FormControl>
           <FormLabel>Images</FormLabel>
-          <ImageDropzone />
+          <ImageDropzone name="images" control={control} />
         </FormControl>
 
         <FormControl

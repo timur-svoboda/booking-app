@@ -8,11 +8,11 @@ import {
   Skeleton,
 } from '@chakra-ui/react';
 import React from 'react';
-import { FileWithPreview } from './file-with-preview';
+import { Thumbnail as IThumbnail } from './types';
 
 /* eslint-disable-next-line */
 export interface ThumbnailProps {
-  file: FileWithPreview;
+  thumbnail: IThumbnail;
 }
 
 export function Thumbnail(props: ThumbnailProps) {
@@ -32,17 +32,10 @@ export function Thumbnail(props: ThumbnailProps) {
         <Image
           boxSize="100px"
           objectFit="cover"
-          src={props.file.preview}
+          src={props.thumbnail.url}
           alt=""
           opacity={loading ? 0 : 1}
-          onLoad={() => {
-            URL.revokeObjectURL(props.file.preview);
-            setLoading(false);
-          }}
-          onError={() => {
-            URL.revokeObjectURL(props.file.preview);
-            setLoading(false);
-          }}
+          onLoad={() => setLoading(false)}
         />
         {loading && (
           <Skeleton
