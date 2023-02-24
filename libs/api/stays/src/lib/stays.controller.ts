@@ -1,4 +1,12 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import {
   JwtAuthGuard,
   Permissions,
@@ -23,5 +31,13 @@ export class StaysController {
     });
 
     return new StayDto(stayDoc);
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('create:stays')
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('thumbnails')
+  async createThumbnail(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
   }
 }
