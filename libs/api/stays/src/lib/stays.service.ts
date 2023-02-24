@@ -20,14 +20,21 @@ export class StaysService {
   }
 
   async createThumbnail(file: Express.Multer.File) {
-    const thumbnail = await sharp(file.buffer)
+    const thumbnailFile = this.storage
+      .bucket(TEMP_IMAGES_BUCKET_ID)
+      .file(`${uuid.v4()}.webp`);
+
+    const thumbnailBuffer = await sharp(file.buffer)
       .resize({ width: 100, height: 100, fit: 'cover' })
       .webp()
       .toBuffer();
 
-    this.storage
-      .bucket(TEMP_IMAGES_BUCKET_ID)
-      .file(`${uuid.v4()}.webp`)
-      .save(thumbnail);
+    await thumbnailFile.save(thumbnailBuffer, {
+      resumable: false,
+    });
+
+    return {
+      publicUrl: thumbnailFile.publicUrl(),
+    };
   }
 }

@@ -16,6 +16,7 @@ import {
 import { StaysService } from './stays.service';
 import { CreateStayDto } from './dto/create-stay.dto';
 import { StayDto } from './dto/stay.dto';
+import { ThumbnailDto } from './dto/thumbnail.dto';
 
 @Controller('stays')
 export class StaysController {
@@ -37,7 +38,9 @@ export class StaysController {
   @Permissions('create:stays')
   @UseInterceptors(FileInterceptor('file'))
   @Post('thumbnails')
-  createThumbnail(@UploadedFile() file: Express.Multer.File) {
+  async createThumbnail(
+    @UploadedFile() file: Express.Multer.File
+  ): Promise<ThumbnailDto> {
     return this.staysService.createThumbnail(file);
   }
 }
