@@ -6,6 +6,7 @@ import {
   Flex,
   useToken,
   Skeleton,
+  VStack,
 } from '@chakra-ui/react';
 import React from 'react';
 
@@ -27,13 +28,12 @@ export function ThumbnailList(props: ThumbnailListProps) {
   }
 
   return (
-    <Box>
+    <VStack spacing={4} alignItems="stretch">
       {props.thumbnails.map((thumbnail) => (
         <Flex
           key={thumbnail.url}
           alignItems="center"
           pr={4}
-          mb={4}
           border={`1px solid ${gray200}`}
           borderRadius="md"
           overflow="hidden"
@@ -67,7 +67,7 @@ export function ThumbnailList(props: ThumbnailListProps) {
           </Box>
         </Flex>
       ))}
-    </Box>
+    </VStack>
   );
 }
 
