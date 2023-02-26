@@ -108,6 +108,14 @@ export function AddStayForm(props: AddStayFormProps) {
     }
   };
 
+  const onThumbnailRemove = (index: number) => {
+    const updateThumbnails = thumbnails.filter((_, i) => {
+      return i !== index;
+    });
+    setThumbnails(updateThumbnails);
+    imagesDescriptions.remove(index);
+  };
+
   /* Markup */
   return (
     <Box as="form" onSubmit={onSubmit}>
@@ -150,6 +158,7 @@ export function AddStayForm(props: AddStayFormProps) {
                   {...register(
                     `${IMAGES_DESCRIPTION_FIELD_NAME}.${index}.value`
                   )}
+                  onRemove={() => onThumbnailRemove(index)}
                 />
               ))}
             </VStack>

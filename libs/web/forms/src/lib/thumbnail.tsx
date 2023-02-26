@@ -20,6 +20,7 @@ export interface ThumbnailProps<
   name: TFieldName;
   required?: boolean;
   disabled?: boolean;
+  onRemove: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export const Thumbnail = React.forwardRef(
@@ -71,7 +72,7 @@ export const Thumbnail = React.forwardRef(
         />
 
         <Box flex="none">
-          <Button type="button" colorScheme="red">
+          <Button type="button" onClick={props.onRemove} colorScheme="red">
             Delete
           </Button>
         </Box>
