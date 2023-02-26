@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDropzone, DropzoneOptions } from 'react-dropzone';
-import { useToken, Box, Center, Text } from '@chakra-ui/react';
+import { useToken, Box, Center, Text, Spinner } from '@chakra-ui/react';
 import {
   Control,
   FieldPath,
@@ -18,6 +18,7 @@ export interface ImageDropzoneProps<
   control: Control<TFieldValues, TContext>;
   required?: boolean;
   onDrop?: DropzoneOptions['onDrop'];
+  isLoading?: boolean;
 }
 
 export function ImageDropzone<
@@ -34,6 +35,7 @@ export function ImageDropzone<
 
   const { getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } =
     useDropzone({
+      disabled: props.isLoading,
       accept: {
         'image/*': [],
       },
@@ -55,13 +57,13 @@ export function ImageDropzone<
 
   const borderColor = React.useMemo(() => {
     if (isDragReject) return red500;
-    if (isDragAccept || isFocused) return blue500;
+    if (isDragAccept) return blue500;
     return 'gray.200';
   }, [isFocused, isDragAccept, isDragReject]);
 
   const boxShadow = React.useMemo(() => {
     if (isDragReject) return `0 0 0 1px ${red500}`;
-    if (isDragAccept || isFocused) return `0 0 0 1px ${blue500}`;
+    if (isDragAccept) return `0 0 0 1px ${blue500}`;
     return '';
   }, [isFocused, isDragAccept, isDragReject]);
 
@@ -77,7 +79,7 @@ export function ImageDropzone<
         borderColor={borderColor}
         borderRadius="md"
         boxShadow={boxShadow}
-        cursor="pointer"
+        cursor={props.isLoading ? 'normal' : 'pointer'}
         transition="all 0.2s ease"
       >
         <input
@@ -88,9 +90,13 @@ export function ImageDropzone<
         />
 
         <Center height="100%">
-          <Text color="gray.500" cursor="pointer">
-            Drag 'n' drop some files here, or click to select files
-          </Text>
+          {props.isLoading ? (
+            <Spinner />
+          ) : (
+            <Text color="gray.500" cursor="pointer">
+              Drag 'n' drop some files here, or click to select files
+            </Text>
+          )}
         </Center>
       </Box>
     </Box>

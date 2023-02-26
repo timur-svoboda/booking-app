@@ -68,9 +68,13 @@ export function AddStayForm(props: AddStayFormProps) {
   });
 
   const [thumbnails, setThumbnails] = React.useState<ThumbnailDto[]>([]);
+  const [areThumbnailsLoading, setAreThumbnailsLoading] =
+    React.useState<boolean>(false);
 
   const onDrop = async (acceptedFiles: File[]) => {
     try {
+      setAreThumbnailsLoading(true);
+
       const newThumbnails = await Promise.all(
         acceptedFiles.map(async (file) => {
           const fileData = new FormData();
@@ -87,6 +91,8 @@ export function AddStayForm(props: AddStayFormProps) {
       setThumbnails([...thumbnails, ...newThumbnails]);
     } catch (errors: unknown) {
       toast.error('Unknown error. Try again');
+    } finally {
+      setAreThumbnailsLoading(false);
     }
   };
 
@@ -112,7 +118,12 @@ export function AddStayForm(props: AddStayFormProps) {
 
         <FormControl>
           <FormLabel>Images</FormLabel>
-          <ImageDropzone name="images" control={control} onDrop={onDrop} />
+          <ImageDropzone
+            name="images"
+            control={control}
+            onDrop={onDrop}
+            isLoading={areThumbnailsLoading}
+          />
           <Box mt={thumbnails.length > 0 ? 4 : 0}>
             <ThumbnailList
               thumbnails={thumbnails.map((thumbnail) => ({
