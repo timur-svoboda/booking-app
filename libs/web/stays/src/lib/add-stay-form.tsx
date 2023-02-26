@@ -16,17 +16,22 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
-import { ImageDropzone, ValidationErrors } from '@booking-app/web/forms';
+import {
+  ImageDropzone,
+  ThumbnailList,
+  ValidationErrors,
+} from '@booking-app/web/forms';
 import StayApi from './stay-api';
-import { FormData } from './types/form-data';
+import { StayFormData } from './types/stay-form-data';
+import { ThumbnailDto } from '@booking-app/shared/dtos';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
 
 export function AddStayForm(props: AddStayFormProps) {
   const { getAccessTokenSilently } = useAuth0();
-
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const {
     register,
@@ -35,17 +40,14 @@ export function AddStayForm(props: AddStayFormProps) {
     setError,
     formState: { errors },
     control,
-  } = useForm<FormData>({
+  } = useForm<StayFormData>({
     reValidateMode: 'onSubmit',
   });
   const validationErrorsRef = React.useRef(
-    new ValidationErrors(FormData, setError)
+    new ValidationErrors(StayFormData, setError)
   );
 
-  const [loading, setLoading] = React.useState<boolean>(false);
-
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     const accessToken = await getAccessTokenSilently();
     setLoading(true);
     clearErrors();
@@ -64,6 +66,29 @@ export function AddStayForm(props: AddStayFormProps) {
 
     setLoading(false);
   });
+
+  const [thumbnails, setThumbnails] = React.useState<ThumbnailDto[]>([]);
+
+  const onDrop = async (acceptedFiles: File[]) => {
+    try {
+      const newThumbnails = await Promise.all(
+        acceptedFiles.map(async (file) => {
+          const fileData = new FormData();
+          fileData.append('file', file);
+          const accessToken = await getAccessTokenSilently();
+          const { data: thumbnail } = await StayApi.createThumbnail(
+            fileData,
+            accessToken
+          );
+          return thumbnail;
+        })
+      );
+
+      setThumbnails([...thumbnails, ...newThumbnails]);
+    } catch (errors: unknown) {
+      toast.error('Unknown error. Try again');
+    }
+  };
 
   return (
     <Box as="form" onSubmit={onSubmit}>
@@ -87,7 +112,14 @@ export function AddStayForm(props: AddStayFormProps) {
 
         <FormControl>
           <FormLabel>Images</FormLabel>
-          <ImageDropzone name="images" control={control} />
+          <ImageDropzone name="images" control={control} onDrop={onDrop} />
+          <Box mt={thumbnails.length > 0 ? 4 : 0}>
+            <ThumbnailList
+              thumbnails={thumbnails.map((thumbnail) => ({
+                url: thumbnail.publicUrl,
+              }))}
+            />
+          </Box>
         </FormControl>
 
         <FormControl

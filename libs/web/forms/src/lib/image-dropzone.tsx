@@ -1,8 +1,6 @@
 import React from 'react';
-import { useDropzone } from 'react-dropzone';
+import { useDropzone, DropzoneOptions } from 'react-dropzone';
 import { useToken, Box, Center, Text } from '@chakra-ui/react';
-import { Thumbnail as ThumbnailType } from './types';
-import { Thumbnail } from './thumbnail';
 import {
   Control,
   FieldPath,
@@ -19,7 +17,7 @@ export interface ImageDropzoneProps<
   name: TName;
   control: Control<TFieldValues, TContext>;
   required?: boolean;
-  thumbnails?: ThumbnailType[];
+  onDrop?: DropzoneOptions['onDrop'];
 }
 
 export function ImageDropzone<
@@ -39,11 +37,15 @@ export function ImageDropzone<
       accept: {
         'image/*': [],
       },
-      onDrop: (acceptedFiles) => {
+      onDrop: (acceptedFiles, fileRejections, event) => {
         if (Array.isArray(field.value)) {
           field.onChange([...field.value, ...acceptedFiles]);
         } else {
           field.onChange(acceptedFiles);
+        }
+
+        if (props.onDrop) {
+          props.onDrop(acceptedFiles, fileRejections, event);
         }
       },
     });
@@ -91,18 +93,8 @@ export function ImageDropzone<
           </Text>
         </Center>
       </Box>
-
-      {props.thumbnails && props.thumbnails.length > 0 && (
-        <Box as="aside" mt={4}>
-          {props.thumbnails.map((thumbnail) => (
-            <Box mb={4} key={thumbnail.url}>
-              <Thumbnail thumbnail={thumbnail} />
-            </Box>
-          ))}
-        </Box>
-      )}
     </Box>
   );
-};
+}
 
 export default ImageDropzone;
