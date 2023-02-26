@@ -18,7 +18,7 @@ import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
 import {
   ImageDropzone,
-  ThumbnailList,
+  Thumbnail,
   ValidationErrors,
 } from '@booking-app/web/forms';
 import StayApi from './stay-api';
@@ -124,13 +124,17 @@ export function AddStayForm(props: AddStayFormProps) {
             onDrop={onDrop}
             isLoading={areThumbnailsLoading}
           />
-          <Box mt={thumbnails.length > 0 ? 4 : 0}>
-            <ThumbnailList
-              thumbnails={thumbnails.map((thumbnail) => ({
-                url: thumbnail.publicUrl,
-              }))}
-            />
-          </Box>
+          {thumbnails.length && (
+            <VStack
+              spacing={4}
+              alignItems="stretch"
+              mt={thumbnails.length ? 4 : 0}
+            >
+              {thumbnails.map((thumbnail) => (
+                <Thumbnail url={thumbnail.publicUrl} />
+              ))}
+            </VStack>
+          )}
         </FormControl>
 
         <FormControl
