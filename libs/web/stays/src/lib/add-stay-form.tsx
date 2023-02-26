@@ -15,7 +15,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import {
   ImageDropzone,
   Thumbnail,
@@ -28,7 +28,10 @@ import { ThumbnailDto } from '@booking-app/shared/dtos';
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
 
+const IMAGES_DESCRIPTION_FIELD_NAME = 'imagesDescriptions';
+
 export function AddStayForm(props: AddStayFormProps) {
+  /* Main logic of the form */
   const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState<boolean>(false);
@@ -48,6 +51,7 @@ export function AddStayForm(props: AddStayFormProps) {
   );
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
     const accessToken = await getAccessTokenSilently();
     setLoading(true);
     clearErrors();
@@ -67,9 +71,14 @@ export function AddStayForm(props: AddStayFormProps) {
     setLoading(false);
   });
 
+  /* Images logic */
   const [thumbnails, setThumbnails] = React.useState<ThumbnailDto[]>([]);
   const [areThumbnailsLoading, setAreThumbnailsLoading] =
     React.useState<boolean>(false);
+  const imagesDescriptions = useFieldArray({
+    control,
+    name: IMAGES_DESCRIPTION_FIELD_NAME,
+  });
 
   const onDrop = async (acceptedFiles: File[]) => {
     try {
@@ -87,8 +96,11 @@ export function AddStayForm(props: AddStayFormProps) {
           return thumbnail;
         })
       );
-
       setThumbnails([...thumbnails, ...newThumbnails]);
+
+      newThumbnails.forEach(() => {
+        imagesDescriptions.append({ value: '' });
+      });
     } catch (errors: unknown) {
       toast.error('Unknown error. Try again');
     } finally {
@@ -96,6 +108,7 @@ export function AddStayForm(props: AddStayFormProps) {
     }
   };
 
+  /* Markup */
   return (
     <Box as="form" onSubmit={onSubmit}>
       <Heading as="h1" size="lg" mb={6}>
@@ -124,14 +137,20 @@ export function AddStayForm(props: AddStayFormProps) {
             onDrop={onDrop}
             isLoading={areThumbnailsLoading}
           />
-          {thumbnails.length && (
+          {thumbnails.length > 0 && (
             <VStack
               spacing={4}
               alignItems="stretch"
               mt={thumbnails.length ? 4 : 0}
             >
-              {thumbnails.map((thumbnail) => (
-                <Thumbnail url={thumbnail.publicUrl} />
+              {thumbnails.map((thumbnail, index) => (
+                <Thumbnail
+                  key={thumbnail.publicUrl}
+                  url={thumbnail.publicUrl}
+                  {...register(
+                    `${IMAGES_DESCRIPTION_FIELD_NAME}.${index}.value`
+                  )}
+                />
               ))}
             </VStack>
           )}
