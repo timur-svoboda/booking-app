@@ -10,8 +10,10 @@ export class StayApi {
     });
   }
 
-  static createThumbnail(file: FormData, accessToken: string) {
-    return axios.post<ThumbnailDto>('/api/stays/thumbnails', file, {
+  static createThumbnail(file: File, accessToken: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return axios.post<ThumbnailDto>('/api/stays/thumbnails', formData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

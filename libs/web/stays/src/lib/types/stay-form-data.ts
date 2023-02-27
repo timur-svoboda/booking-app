@@ -1,6 +1,9 @@
 export class StayFormData {
   title: string = '';
   description: string = '';
-  images: File[] = [];
-  imagesDescriptions: { value: string }[] = [];
+  images: {
+    thumbnailUrl: string;
+    file: File;
+    description: string;
+  }[] = [];
 }
