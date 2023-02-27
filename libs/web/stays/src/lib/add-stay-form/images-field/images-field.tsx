@@ -1,17 +1,17 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { VStack } from '@chakra-ui/react';
+import { FormControl, FormLabel, VStack } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { Thumbnail } from './thumbnail';
 import { Dropzone, DropzoneProps } from './dropzone';
-import { StayFormData } from '../types/stay-form-data';
-import { StayApi } from '../stay-api';
+import { StayFormData } from '../../types/stay-form-data';
+import { StayApi } from '../../stay-api';
 
 /* eslint-disable-next-line */
-export interface ImagesDropzoneProps {}
+export interface ImagesFieldProps {}
 
-export function ImagesDropzone(props: ImagesDropzoneProps) {
+export function ImagesField(props: ImagesFieldProps) {
   const { getAccessTokenSilently } = useAuth0();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { register, control } = useFormContext<StayFormData>();
@@ -45,8 +45,9 @@ export function ImagesDropzone(props: ImagesDropzoneProps) {
   };
 
   return (
-    <div>
-      {/* Dropzone */}
+    <FormControl>
+      <FormLabel>Images</FormLabel>
+
       <Dropzone
         accept={{ 'image/*': [] }}
         isLoading={isLoading}
@@ -54,7 +55,6 @@ export function ImagesDropzone(props: ImagesDropzoneProps) {
         onDrop={onDrop}
       />
 
-      {/* Thumbnail List */}
       {fields.length > 0 && (
         <VStack spacing={4} alignItems="stretch" mt={4}>
           {fields.map((field, index) => (
@@ -67,8 +67,8 @@ export function ImagesDropzone(props: ImagesDropzoneProps) {
           ))}
         </VStack>
       )}
-    </div>
+    </FormControl>
   );
 }
 
-export default ImagesDropzone;
+export default ImagesField;

@@ -1,5 +1,5 @@
 import { Box, Container } from '@chakra-ui/react';
-import AddStayForm from './add-stay-form';
+import AddStayForm from './add-stay-form/add-stay-form';
 
 /* eslint-disable-next-line */
 export interface AddStayPageProps {}

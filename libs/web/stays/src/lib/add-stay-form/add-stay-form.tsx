@@ -1,30 +1,18 @@
 import React from 'react';
-import {
-  Box,
-  Button,
-  Flex,
-  FormControl,
-  FormLabel,
-  Heading,
-  Input,
-  Textarea,
-  VStack,
-  FormErrorMessage,
-} from '@chakra-ui/react';
-import TextareaAutosize from 'react-textarea-autosize';
+import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FormProvider, useForm } from 'react-hook-form';
 import { ValidationErrors } from '@booking-app/web/forms';
-import StayApi from './stay-api';
-import { StayFormData } from './types/stay-form-data';
-import { ImagesDropzone } from './images-dropzone/images-dropzone';
+import StayApi from '../stay-api';
+import { StayFormData } from '../types/stay-form-data';
+import TitleField from './title-field';
+import DescriptionField from './description-field';
+import ImagesField from './images-field/images-field';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
-
-const IMAGES_DESCRIPTION_FIELD_NAME = 'imagesDescriptions';
 
 export function AddStayForm(props: AddStayFormProps) {
   /* Main logic of the form */
@@ -69,42 +57,9 @@ export function AddStayForm(props: AddStayFormProps) {
         </Heading>
 
         <VStack spacing={4} mb={6}>
-          <FormControl
-            isInvalid={methods.formState.errors.title !== undefined}
-            isDisabled={loading}
-          >
-            <FormLabel>Title</FormLabel>
-            <Input
-              type="text"
-              placeholder="My Awesome Hotel"
-              {...methods.register('title')}
-            />
-            <FormErrorMessage>
-              {methods.formState.errors.title?.message}
-            </FormErrorMessage>
-          </FormControl>
-
-          <FormControl>
-            <FormLabel>Images</FormLabel>
-            <ImagesDropzone />
-          </FormControl>
-
-          <FormControl
-            isInvalid={methods.formState.errors.description !== undefined}
-            isDisabled={loading}
-          >
-            <FormLabel>Description</FormLabel>
-            <Textarea
-              placeholder="Description of My Awesome Hotel"
-              resize="none"
-              minRows={5}
-              as={TextareaAutosize}
-              {...methods.register('description')}
-            />
-            <FormErrorMessage>
-              {methods.formState.errors.description?.message}
-            </FormErrorMessage>
-          </FormControl>
+          <TitleField />
+          <ImagesField />
+          <DescriptionField />
         </VStack>
 
         <Flex justifyContent="flex-end">
