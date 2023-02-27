@@ -18,7 +18,6 @@ export function AddStayForm(props: AddStayFormProps) {
   /* Main logic of the form */
   const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
-  const [loading, setLoading] = React.useState<boolean>(false);
 
   const methods = useForm<StayFormData>({
     reValidateMode: 'onSubmit',
@@ -30,7 +29,6 @@ export function AddStayForm(props: AddStayFormProps) {
   const onSubmit = methods.handleSubmit(async (data) => {
     console.log(data);
     const accessToken = await getAccessTokenSilently();
-    setLoading(true);
     methods.clearErrors();
 
     try {
@@ -44,8 +42,6 @@ export function AddStayForm(props: AddStayFormProps) {
         toast.error('Unknown error. Try again');
       }
     }
-
-    setLoading(false);
   });
 
   /* Markup */
@@ -63,7 +59,11 @@ export function AddStayForm(props: AddStayFormProps) {
         </VStack>
 
         <Flex justifyContent="flex-end">
-          <Button type="submit" colorScheme="teal" isLoading={loading}>
+          <Button
+            type="submit"
+            colorScheme="teal"
+            isLoading={methods.formState.isSubmitting}
+          >
             Submit
           </Button>
         </Flex>
