@@ -5,6 +5,10 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator,
+  FileTypeValidator,
+  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -39,7 +43,19 @@ export class StaysController {
   @UseInterceptors(FileInterceptor('file'))
   @Post('thumbnails')
   async createThumbnail(
-    @UploadedFile() file: Express.Multer.File
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [new FileTypeValidator({ fileType: /image\/*/ })],
+        exceptionFactory: () =>
+          new BadRequestException('File must be an image'),
+      }),
+      new ParseFilePipe({
+        validators: [new MaxFileSizeValidator({ maxSize: 1e7 })],
+        exceptionFactory: () =>
+          new BadRequestException('Image size must be smaller than 10 MB'),
+      })
+    )
+    file: Express.Multer.File
   ): Promise<ThumbnailDto> {
     return this.staysService.createThumbnail(file);
   }

@@ -1,8 +1,13 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-import { FormControl, FormLabel, VStack } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { FormControl, FormLabel, VStack } from '@chakra-ui/react';
+import {
+  hasData,
+  hasResponse,
+  isBadRequest,
+} from '@booking-app/web/validation';
 import { Thumbnail } from './thumbnail';
 import { Dropzone, DropzoneProps } from './dropzone';
 import { StayFormData } from '../../types/stay-form-data';
@@ -33,8 +38,16 @@ export function ImagesField(props: ImagesFieldProps) {
       );
 
       newThumbnails.forEach((thumbnail) => append(thumbnail));
-    } catch (errors: unknown) {
-      toast.error('Unknown error. Try again');
+    } catch (error: unknown) {
+      if (
+        hasResponse(error) &&
+        hasData(error.response) &&
+        isBadRequest(error.response.data)
+      ) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error('Unknown error. Try again');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -48,12 +61,7 @@ export function ImagesField(props: ImagesFieldProps) {
     <FormControl>
       <FormLabel>Images</FormLabel>
 
-      <Dropzone
-        accept={{ 'image/*': [] }}
-        isLoading={isLoading}
-        disabled={isLoading}
-        onDrop={onDrop}
-      />
+      <Dropzone isLoading={isLoading} disabled={isLoading} onDrop={onDrop} />
 
       {fields.length > 0 && (
         <VStack spacing={4} alignItems="stretch" mt={4}>
