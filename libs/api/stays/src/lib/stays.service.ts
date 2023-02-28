@@ -19,7 +19,8 @@ export class StaysService {
     return this.catModel.create(data);
   }
 
-  async createThumbnail(file: Express.Multer.File) {
+  async createImage(file: Express.Multer.File) {
+    // Save thumbnail
     const thumbnailFile = this.storage
       .bucket(TEMP_IMAGES_BUCKET_ID)
       .file(`${uuid.v4()}.webp`);
@@ -29,12 +30,23 @@ export class StaysService {
       .webp()
       .toBuffer();
 
-    await thumbnailFile.save(thumbnailBuffer, {
-      resumable: false,
-    });
+    await thumbnailFile.save(thumbnailBuffer, { resumable: false });
+
+    // Save main image
+    const mainImageFile = this.storage
+      .bucket(TEMP_IMAGES_BUCKET_ID)
+      .file(`${uuid.v4()}.webp`);
+
+    const mainImageFileBuffer = await sharp(file.buffer)
+      .resize({ width: 600 })
+      .webp()
+      .toBuffer();
+
+    await mainImageFile.save(mainImageFileBuffer, { resumable: false });
 
     return {
-      publicUrl: thumbnailFile.publicUrl(),
+      thumbnail: thumbnailFile.publicUrl(),
+      mainImage: mainImageFile.publicUrl(),
     };
   }
 }

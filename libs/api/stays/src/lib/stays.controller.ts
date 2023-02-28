@@ -5,10 +5,6 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
-  ParseFilePipe,
-  MaxFileSizeValidator,
-  FileTypeValidator,
-  BadRequestException,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -20,7 +16,11 @@ import {
 import { StaysService } from './stays.service';
 import { CreateStayDto } from './dto/create-stay.dto';
 import { StayDto } from './dto/stay.dto';
-import { ThumbnailDto } from './dto/thumbnail.dto';
+import { StayImageDto } from './dto/stay-image.dto';
+import {
+  imageExtensionValidator,
+  imageSizeValidator,
+} from './image-validators';
 
 @Controller('stays')
 export class StaysController {
@@ -41,22 +41,11 @@ export class StaysController {
   @UseGuards(JwtAuthGuard, PermissionsGuard)
   @Permissions('create:stays')
   @UseInterceptors(FileInterceptor('file'))
-  @Post('thumbnails')
-  async createThumbnail(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [new FileTypeValidator({ fileType: /image\/*/ })],
-        exceptionFactory: () =>
-          new BadRequestException('File must be an image'),
-      }),
-      new ParseFilePipe({
-        validators: [new MaxFileSizeValidator({ maxSize: 1e7 })],
-        exceptionFactory: () =>
-          new BadRequestException('Image size must be smaller than 10 MB'),
-      })
-    )
+  @Post('images')
+  createImage(
+    @UploadedFile(imageExtensionValidator, imageSizeValidator)
     file: Express.Multer.File
-  ): Promise<ThumbnailDto> {
-    return this.staysService.createThumbnail(file);
+  ): Promise<StayImageDto> {
+    return this.staysService.createImage(file);
   }
 }

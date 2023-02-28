@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { CreateStayDto, StayDto, ThumbnailDto } from '@booking-app/shared/dtos';
+import { CreateStayDto, StayDto, StayImageDto } from '@booking-app/shared/dtos';
 
 export class StayApi {
   static create(createStayDto: CreateStayDto, accessToken: string) {
@@ -10,10 +10,10 @@ export class StayApi {
     });
   }
 
-  static createThumbnail(file: File, accessToken: string) {
+  static createImage(file: File, accessToken: string) {
     const formData = new FormData();
     formData.append('file', file);
-    return axios.post<ThumbnailDto>('/api/stays/thumbnails', formData, {
+    return axios.post<StayImageDto>('/api/stays/images', formData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

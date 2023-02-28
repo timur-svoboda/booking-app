@@ -25,19 +25,19 @@ export function ImagesField(props: ImagesFieldProps) {
   const onDrop: DropzoneProps['onDrop'] = async (acceptedFiles) => {
     try {
       setIsLoading(true);
-
       const accessToken = await getAccessTokenSilently();
-      const newThumbnails = await Promise.all(
-        acceptedFiles.map(async (file) => ({
-          thumbnailUrl: (
-            await StayApi.createThumbnail(file, accessToken)
-          ).data.publicUrl,
-          file,
-          description: '',
-        }))
-      );
+      const newImages = await Promise.all(
+        acceptedFiles.map(async (file) => {
+          const { data: images } = await StayApi.createImage(file, accessToken);
 
-      newThumbnails.forEach((thumbnail) => append(thumbnail));
+          return {
+            thumbnail: images.thumbnail,
+            mainImage: images.mainImage,
+            description: '',
+          };
+        })
+      );
+      newImages.forEach((image) => append(image));
     } catch (error: unknown) {
       if (
         hasResponse(error) &&
@@ -68,7 +68,7 @@ export function ImagesField(props: ImagesFieldProps) {
           {fields.map((field, index) => (
             <Thumbnail
               key={field.id}
-              url={field.thumbnailUrl}
+              url={field.thumbnail}
               onRemove={() => onRemove(index)}
               {...register(`images.${index}.description`)}
             />
