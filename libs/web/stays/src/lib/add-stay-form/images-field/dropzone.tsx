@@ -6,11 +6,13 @@ import { useToken, Box, Center, Text, Spinner } from '@chakra-ui/react';
 export interface DropzoneProps extends DropzoneOptions {
   hintText?: string;
   isLoading?: boolean;
+  isError?: boolean;
 }
 
 export function Dropzone({
   hintText,
   isLoading,
+  isError,
   ...dropzoneOptions
 }: DropzoneProps) {
   /* Logic */
@@ -21,13 +23,13 @@ export function Dropzone({
   const [red500, blue500] = useToken('colors', ['red.500', 'blue.500']);
 
   const borderColor = React.useMemo(() => {
-    if (isDragReject) return red500;
+    if (isDragReject || isError) return red500;
     if (isDragAccept) return blue500;
     return 'gray.200';
   }, [isFocused, isDragAccept, isDragReject]);
 
   const boxShadow = React.useMemo(() => {
-    if (isDragReject) return `0 0 0 1px ${red500}`;
+    if (isDragReject || isError) return `0 0 0 1px ${red500}`;
     if (isDragAccept) return `0 0 0 1px ${blue500}`;
     return '';
   }, [isFocused, isDragAccept, isDragReject]);

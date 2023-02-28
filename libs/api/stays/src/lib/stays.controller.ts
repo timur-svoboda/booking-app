@@ -16,7 +16,7 @@ import {
 import { StaysService } from './stays.service';
 import { CreateStayDto } from './dto/create-stay.dto';
 import { StayDto } from './dto/stay.dto';
-import { StayImageDto } from './dto/stay-image.dto';
+import { StayImagesUrlsDto } from './dto/stay-images-urls.dto';
 import {
   imageExtensionValidator,
   imageSizeValidator,
@@ -45,7 +45,7 @@ export class StaysController {
   createImage(
     @UploadedFile(imageExtensionValidator, imageSizeValidator)
     file: Express.Multer.File
-  ): Promise<StayImageDto> {
+  ): Promise<StayImagesUrlsDto> {
     return this.staysService.createImage(file);
   }
 }

@@ -1,1 +1,1 @@
-export * from './lib/validation-errors';
+export * from './lib/class-validator-errors-to-fields-errors';

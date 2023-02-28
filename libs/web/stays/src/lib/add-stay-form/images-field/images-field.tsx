@@ -2,7 +2,12 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useFieldArray, useFormContext } from 'react-hook-form';
-import { FormControl, FormLabel, VStack } from '@chakra-ui/react';
+import {
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  VStack,
+} from '@chakra-ui/react';
 import {
   hasData,
   hasResponse,
@@ -17,27 +22,32 @@ import { StayApi } from '../../stay-api';
 export interface ImagesFieldProps {}
 
 export function ImagesField(props: ImagesFieldProps) {
+  const [thumbnailUrls, setThumbnailUrls] = React.useState<string[]>([]);
   const { getAccessTokenSilently } = useAuth0();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const { register, control } = useFormContext<StayFormData>();
+  const { register, control, formState } = useFormContext<StayFormData>();
   const { fields, append, remove } = useFieldArray({ name: 'images', control });
 
   const onDrop: DropzoneProps['onDrop'] = async (acceptedFiles) => {
     try {
       setIsLoading(true);
       const accessToken = await getAccessTokenSilently();
-      const newImages = await Promise.all(
+      const imagesUrls = await Promise.all(
         acceptedFiles.map(async (file) => {
-          const { data: images } = await StayApi.createImage(file, accessToken);
-
-          return {
-            thumbnail: images.thumbnail,
-            mainImage: images.mainImage,
-            description: '',
-          };
+          const response = await StayApi.createImage(file, accessToken);
+          return response.data;
         })
       );
-      newImages.forEach((image) => append(image));
+      imagesUrls.forEach((imageUrls) => {
+        append({
+          url: imageUrls.mainImage,
+          description: '',
+        });
+      });
+      setThumbnailUrls([
+        ...thumbnailUrls,
+        ...imagesUrls.map((imageUrls) => imageUrls.thumbnail),
+      ]);
     } catch (error: unknown) {
       if (
         hasResponse(error) &&
@@ -55,27 +65,45 @@ export function ImagesField(props: ImagesFieldProps) {
 
   const onRemove = (index: number) => {
     remove(index);
+    setThumbnailUrls(thumbnailUrls.filter((_, i) => i !== index));
   };
 
   return (
-    <FormControl>
-      <FormLabel>Images</FormLabel>
-
-      <Dropzone isLoading={isLoading} disabled={isLoading} onDrop={onDrop} />
-
+    <>
+      <FormControl isInvalid={formState.errors.images !== undefined}>
+        <FormLabel>Images</FormLabel>
+        <Dropzone
+          isLoading={isLoading}
+          disabled={isLoading}
+          isError={formState.errors.images !== undefined}
+          onDrop={onDrop}
+        />
+        <FormErrorMessage>{formState.errors.images?.message}</FormErrorMessage>
+      </FormControl>
       {fields.length > 0 && (
-        <VStack spacing={4} alignItems="stretch" mt={4}>
+        <VStack spacing={4} alignItems="stretch" mt={4} width="100%">
           {fields.map((field, index) => (
-            <Thumbnail
+            <FormControl
               key={field.id}
-              url={field.thumbnail}
-              onRemove={() => onRemove(index)}
-              {...register(`images.${index}.description`)}
-            />
+              isInvalid={
+                formState.errors.images &&
+                formState.errors.images[index]?.description !== undefined
+              }
+            >
+              <Thumbnail
+                url={thumbnailUrls[index]}
+                onRemove={() => onRemove(index)}
+                {...register(`images.${index}.description`)}
+              />
+              <FormErrorMessage>
+                {formState.errors.images &&
+                  formState.errors.images[index]?.description?.message}
+              </FormErrorMessage>
+            </FormControl>
           ))}
         </VStack>
       )}
-    </FormControl>
+    </>
   );
 }
 

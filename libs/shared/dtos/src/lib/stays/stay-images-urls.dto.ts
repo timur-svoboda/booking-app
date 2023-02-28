@@ -1,4 +1,4 @@
-export interface StayImageDto {
+export interface StayImagesUrlsDto {
   thumbnail: string;
   mainImage: string;
 }

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
+import { StayImage, StayImageSchema } from './stay-image.schema';
 
 export type StayDocument = HydratedDocument<Stay>;
 
@@ -13,6 +14,9 @@ export class Stay {
 
   @Prop({ required: true })
   description: string;
+
+  @Prop({ type: [StayImageSchema], required: true })
+  images: StayImage[];
 }
 
 export const StaySchema = SchemaFactory.createForClass(Stay);

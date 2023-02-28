@@ -4,7 +4,8 @@ export const exceptionFactory = (validationErrors: ValidationError[] = []) => {
   return new BadRequestException({
     error: 'Bad Request',
     statusCode: 400,
-    message: validationErrors,
+    message: 'The request body must comply with the schema',
+    validationErrors,
   });
 };
 
