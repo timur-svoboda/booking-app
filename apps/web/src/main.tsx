@@ -16,6 +16,7 @@ root.render(
       <AuthProvider
         domain={environment.auth0.domain}
         clientId={environment.auth0.clientId}
+        audience={environment.auth0.audience}
       >
         <ChakraProvider>
           <App />
