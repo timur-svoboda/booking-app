@@ -1,4 +1,5 @@
 export interface GetManyDto {
-  skip: string;
-  limit: string;
+  skip?: string;
+  limit?: string;
+  hostId?: string;
 }

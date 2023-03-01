@@ -12,13 +12,17 @@ import { toast } from 'react-toastify';
 import useInfiniteScroll from 'react-infinite-scroll-hook';
 import StayApi from '../stay-api';
 import StayCard from './stay-card';
+import { useAuth0 } from '@auth0/auth0-react';
 
 /* eslint-disable-next-line */
-export interface StaysListProps {}
+export interface StaysListProps {
+  own?: boolean;
+}
 
 const limit = 5;
 
 export function StaysList(props: StaysListProps) {
+  const { user } = useAuth0();
   const [stays, setStays] = React.useState<StayDto[]>([]);
   const [loading, setLoading] = React.useState<boolean>(false);
   const [hasNextPage, setHasNextPage] = React.useState<boolean>(true);
@@ -30,6 +34,7 @@ export function StaysList(props: StaysListProps) {
       const { data: newStays } = await StayApi.getMany({
         skip: skip.toString(),
         limit: limit.toString(),
+        hostId: props.own ? user?.sub : undefined,
       });
       if (newStays.length === 0) {
         setHasNextPage(false);
@@ -68,7 +73,7 @@ export function StaysList(props: StaysListProps) {
       >
         {stays.map((stay) => (
           <GridItem width="100%">
-            <StayCard stay={stay} />
+            <StayCard stay={stay} own={props.own} />
           </GridItem>
         ))}
       </Grid>
