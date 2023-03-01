@@ -31,6 +31,14 @@ export class StayApi {
     });
   }
 
+  static delete(stayId: string, accessToken: string) {
+    return axios.delete<StayDto>(`/api/stays/${stayId}`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  }
+
   static createImage(file: File, accessToken: string) {
     const formData = new FormData();
     formData.append('file', file);

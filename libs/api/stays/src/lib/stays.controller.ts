@@ -10,6 +10,7 @@ import {
   Get,
   Query,
   ParseIntPipe,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -69,6 +70,17 @@ export class StaysController {
       hostId: userId,
       ...updateStayDto,
     });
+    return new StayDto(stayDoc);
+  }
+
+  @UseGuards(JwtAuthGuard, PermissionsGuard)
+  @Permissions('delete:stays')
+  @Delete(':id')
+  async delete(
+    @Param('id', ObjectIdValidationPipe) stayId: string,
+    @UserId() userId: string
+  ) {
+    const stayDoc = await this.staysService.delete(stayId, { userId });
     return new StayDto(stayDoc);
   }
 

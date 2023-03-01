@@ -81,6 +81,14 @@ export class StaysService {
     return this.stayModel.findById(id);
   }
 
+  async delete(stayId: string, data: { userId: string }) {
+    const stayDocument = await this.stayModel.findById(stayId);
+    if (stayDocument.hostId !== data.userId) {
+      throw new UnauthorizedException();
+    }
+    return this.stayModel.findByIdAndDelete(stayId);
+  }
+
   async createImage(file: Express.Multer.File) {
     // Save thumbnail
     const thumbnailFile = this.storage
