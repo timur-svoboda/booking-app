@@ -8,6 +8,7 @@ import { AppBar } from '@booking-app/web/app-bar';
 import {
   AddStayPage,
   EditStayPage,
+  StaySinglePage,
   StaysListPage,
 } from '@booking-app/web/stays';
 import { AuthRequired } from '@booking-app/web/auth';
@@ -20,6 +21,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<StaysListPage />} />
         <Route path="stays">
+          <Route path=":stayId" element={<StaySinglePage />} />
           <Route element={<AuthRequired />}>
             <Route path="own" element={<StaysListPage own />} />
           </Route>
