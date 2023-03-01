@@ -18,6 +18,7 @@ import {
 import { CreateStayDto } from './dto/create-stay.dto';
 import { Stay, StayDocument } from './schemas/stay.schema';
 import { UpdateStayDto } from './dto/update-stay.dto';
+import { GetManyDto } from './dto/get-many.dto';
 
 @Injectable()
 export class StaysService {
@@ -43,6 +44,13 @@ export class StaysService {
       throw new NotFoundException();
     }
     return stayDoc;
+  }
+
+  getMany(getManyDto: GetManyDto) {
+    return this.stayModel
+      .find({})
+      .skip(+getManyDto.skip || 0)
+      .limit(+getManyDto.limit || 5);
   }
 
   async update(id: string, data: UpdateStayDto & { hostId: string }) {

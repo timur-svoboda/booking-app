@@ -5,7 +5,11 @@ import { Route, Routes } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppBar } from '@booking-app/web/app-bar';
-import { AddStayPage, EditStayPage } from '@booking-app/web/stays';
+import {
+  AddStayPage,
+  EditStayPage,
+  StaysListPage,
+} from '@booking-app/web/stays';
 import { AuthRequired } from '@booking-app/web/auth';
 
 export function App() {
@@ -14,6 +18,7 @@ export function App() {
       <AppBar />
 
       <Routes>
+        <Route path="/" element={<StaysListPage />} />
         <Route path="stays">
           <Route element={<AuthRequired />}>
             <Route path="add-new" element={<AddStayPage />} />

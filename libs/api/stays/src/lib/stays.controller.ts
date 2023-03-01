@@ -8,6 +8,8 @@ import {
   Patch,
   Param,
   Get,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {
@@ -26,6 +28,7 @@ import {
   imageExtensionValidator,
   imageSizeValidator,
 } from './image-validators';
+import { GetManyDto } from './dto/get-many.dto';
 
 @Controller('stays')
 export class StaysController {
@@ -46,6 +49,12 @@ export class StaysController {
   async getOne(@Param('id', ObjectIdValidationPipe) id: string) {
     const stayDoc = await this.staysService.getOne(id);
     return new StayDto(stayDoc);
+  }
+
+  @Get()
+  async getMany(@Query() getManyDto: GetManyDto) {
+    const stayDocs = await this.staysService.getMany(getManyDto);
+    return stayDocs.map((stayDoc) => new StayDto(stayDoc));
   }
 
   @UseGuards(JwtAuthGuard, PermissionsGuard)
