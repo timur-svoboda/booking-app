@@ -7,4 +7,7 @@ export interface StayDto {
     url: string;
     description: string;
   }[];
+  pricePerNight: number;
+  minimumLengthOfStay: number;
+  reservationPeriod: number;
 }

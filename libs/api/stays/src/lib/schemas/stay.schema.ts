@@ -17,6 +17,15 @@ export class Stay {
 
   @Prop({ type: [StayImageSchema], required: true })
   images: StayImage[];
+
+  @Prop({ required: true })
+  pricePerNight: number;
+
+  @Prop({ default: 1 })
+  minimumLengthOfStay?: number;
+
+  @Prop({ default: 3 })
+  reservationPeriod?: number;
 }
 
 export const StaySchema = SchemaFactory.createForClass(Stay);

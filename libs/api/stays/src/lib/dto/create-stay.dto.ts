@@ -5,17 +5,21 @@ import {
   Length,
   ValidateNested,
   Matches,
+  IsPositive,
+  IsOptional,
 } from 'class-validator';
-import { Type } from 'class-transformer';
+import { Transform, TransformFnParams, Type } from 'class-transformer';
 import { CreateStayDto as ICreateStayDto } from '@booking-app/shared/dtos';
 import { TEMP_IMAGES_BUCKET_ID } from '@booking-app/api/cloud-storage';
 
 export class CreateStayDto implements ICreateStayDto {
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   @Length(3, 100, {
     message: 'It must be a string between 3 and 100 characters long',
   })
   title: ICreateStayDto['title'];
 
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   @Length(80, 450, {
     message: 'It must be a string between 80 and 450 characters long',
   })
@@ -31,9 +35,21 @@ export class CreateStayDto implements ICreateStayDto {
   @ValidateNested()
   @Type(() => StayImage)
   images: StayImage[];
+
+  @IsPositive()
+  pricePerNight: ICreateStayDto['pricePerNight'];
+
+  @IsPositive()
+  @IsOptional()
+  minimumLengthOfStay?: ICreateStayDto['minimumLengthOfStay'];
+
+  @IsPositive()
+  @IsOptional()
+  reservationPeriod?: ICreateStayDto['reservationPeriod'];
 }
 
 class StayImage {
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   @Matches(
     new RegExp(
       `^https:\/\/storage.googleapis.com\/${TEMP_IMAGES_BUCKET_ID}\/.*\.webp$`
@@ -41,6 +57,7 @@ class StayImage {
   )
   url: ICreateStayDto['images'][number]['url'];
 
+  @Transform(({ value }: TransformFnParams) => value?.trim())
   @Length(0, 100, {
     message: 'It must not be longer than 100 characters',
   })

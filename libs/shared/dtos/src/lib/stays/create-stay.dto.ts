@@ -5,4 +5,7 @@ export interface CreateStayDto {
     url: string;
     description: string;
   }[];
+  pricePerNight: number;
+  minimumLengthOfStay?: number;
+  reservationPeriod?: number;
 }

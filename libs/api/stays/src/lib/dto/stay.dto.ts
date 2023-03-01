@@ -7,6 +7,9 @@ export class StayDto implements IStayDto {
   title: IStayDto['title'];
   description: IStayDto['description'];
   images: IStayDto['images'];
+  pricePerNight: IStayDto['pricePerNight'];
+  minimumLengthOfStay: IStayDto['minimumLengthOfStay'];
+  reservationPeriod: IStayDto['reservationPeriod'];
 
   constructor(stayDoc: StayDocument) {
     this.id = stayDoc._id.toString();
@@ -17,5 +20,8 @@ export class StayDto implements IStayDto {
       url: image.url,
       description: image.description,
     }));
+    this.pricePerNight = stayDoc.pricePerNight;
+    this.minimumLengthOfStay = stayDoc.minimumLengthOfStay;
+    this.reservationPeriod = stayDoc.reservationPeriod;
   }
 }

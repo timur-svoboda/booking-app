@@ -15,6 +15,11 @@ import {
   isBadRequestWithValidationErrors,
 } from '@booking-app/web/validation';
 import { classValidatorErrorsToFieldsErrors } from '@booking-app/web/forms';
+import PriceField, { parsePrice } from './price-field';
+import MinStayLengthField, { parseStayLength } from './min-stay-length-field';
+import ReservationPeriodField, {
+  parseReservationPeriod,
+} from './reservation-period-field';
 
 /* eslint-disable-next-line */
 export interface AddStayFormProps {}
@@ -23,12 +28,25 @@ export function AddStayForm(props: AddStayFormProps) {
   /* Main logic of the form */
   const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
-  const methods = useForm<StayFormData>({ reValidateMode: 'onSubmit' });
+  const methods = useForm<StayFormData>({
+    reValidateMode: 'onSubmit',
+    defaultValues: {
+      pricePerNight: '$100',
+      minimumLengthOfStay: '1 day',
+      reservationPeriod: '3 months',
+    },
+  });
 
   const onSubmit = methods.handleSubmit(async (data) => {
     try {
       const accessToken = await getAccessTokenSilently();
-      await StayApi.create(data, accessToken);
+      const preparedData = {
+        ...data,
+        pricePerNight: +parsePrice(data.pricePerNight),
+        minimumLengthOfStay: +parseStayLength(data.minimumLengthOfStay),
+        reservationPeriod: +parseReservationPeriod(data.reservationPeriod),
+      };
+      await StayApi.create(preparedData, accessToken);
       toast.success('Stay is created');
       navigate('/');
     } catch (errors: unknown) {
@@ -37,11 +55,6 @@ export function AddStayForm(props: AddStayFormProps) {
         hasData(errors.response) &&
         isBadRequestWithValidationErrors(errors.response.data)
       ) {
-        console.log(
-          classValidatorErrorsToFieldsErrors(
-            errors.response.data.validationErrors
-          )
-        );
         classValidatorErrorsToFieldsErrors<StayFormData>(
           errors.response.data.validationErrors
         ).forEach((fieldError) => {
@@ -62,13 +75,14 @@ export function AddStayForm(props: AddStayFormProps) {
         <Heading as="h1" size="lg" mb={6}>
           Add a Stay
         </Heading>
-
         <VStack spacing={4} mb={6}>
           <TitleField />
           <ImagesField />
           <DescriptionField />
+          <PriceField />
+          <MinStayLengthField />
+          <ReservationPeriodField />
         </VStack>
-
         <Flex justifyContent="flex-end">
           <Button
             type="submit"
