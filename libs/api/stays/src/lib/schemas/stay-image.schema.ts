@@ -6,7 +6,10 @@ export type StayImageDocument = HydratedDocument<StayImage>;
 @Schema()
 export class StayImage {
   @Prop({ required: true })
-  url: string;
+  mainUrl: string;
+
+  @Prop({ required: true })
+  thumbnailUrl: string;
 
   @Prop({ default: '' })
   description: string;

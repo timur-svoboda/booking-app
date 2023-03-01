@@ -2,7 +2,8 @@ export interface StayFormData {
   title: string;
   description: string;
   images: {
-    url: string;
+    mainUrl: string;
+    thumbnailUrl: string;
     description: string;
   }[];
   pricePerNight: string;

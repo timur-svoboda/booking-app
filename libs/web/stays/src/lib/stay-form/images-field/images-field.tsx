@@ -22,7 +22,6 @@ import { StayApi } from '../../stay-api';
 export interface ImagesFieldProps {}
 
 export function ImagesField(props: ImagesFieldProps) {
-  const [thumbnailUrls, setThumbnailUrls] = React.useState<string[]>([]);
   const { getAccessTokenSilently } = useAuth0();
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { register, control, formState } = useFormContext<StayFormData>();
@@ -40,14 +39,11 @@ export function ImagesField(props: ImagesFieldProps) {
       );
       imagesUrls.forEach((imageUrls) => {
         append({
-          url: imageUrls.mainImage,
+          mainUrl: imageUrls.mainImage,
+          thumbnailUrl: imageUrls.thumbnail,
           description: '',
         });
       });
-      setThumbnailUrls([
-        ...thumbnailUrls,
-        ...imagesUrls.map((imageUrls) => imageUrls.thumbnail),
-      ]);
     } catch (error: unknown) {
       if (
         hasResponse(error) &&
@@ -65,7 +61,6 @@ export function ImagesField(props: ImagesFieldProps) {
 
   const onRemove = (index: number) => {
     remove(index);
-    setThumbnailUrls(thumbnailUrls.filter((_, i) => i !== index));
   };
 
   return (
@@ -89,9 +84,10 @@ export function ImagesField(props: ImagesFieldProps) {
                 formState.errors.images &&
                 formState.errors.images[index]?.description !== undefined
               }
+              isDisabled={formState.isSubmitting}
             >
               <Thumbnail
-                url={thumbnailUrls[index]}
+                url={field.thumbnailUrl}
                 onRemove={() => onRemove(index)}
                 {...register(`images.${index}.description`)}
               />

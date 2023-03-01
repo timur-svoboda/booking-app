@@ -14,6 +14,18 @@ export class StayApi {
     });
   }
 
+  static getOne(id: string) {
+    return axios.get<StayDto>(`/api/stays/${id}`);
+  }
+
+  static update(id: string, updateStayDto: CreateStayDto, accessToken: string) {
+    return axios.patch<StayDto>(`/api/stays/${id}`, updateStayDto, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  }
+
   static createImage(file: File, accessToken: string) {
     const formData = new FormData();
     formData.append('file', file);

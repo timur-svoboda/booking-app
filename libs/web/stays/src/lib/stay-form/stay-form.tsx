@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Button, Flex, Heading, VStack } from '@chakra-ui/react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
@@ -22,15 +21,17 @@ import ReservationPeriodField, {
 } from './reservation-period-field';
 
 /* eslint-disable-next-line */
-export interface AddStayFormProps {}
+export interface StayFormProps {
+  stay?: StayFormData & { id: string };
+}
 
-export function AddStayForm(props: AddStayFormProps) {
+export function StayForm(props: StayFormProps) {
   /* Main logic of the form */
   const { getAccessTokenSilently } = useAuth0();
   const navigate = useNavigate();
   const methods = useForm<StayFormData>({
     reValidateMode: 'onSubmit',
-    defaultValues: {
+    defaultValues: props.stay || {
       pricePerNight: '$100',
       minimumLengthOfStay: '1 day',
       reservationPeriod: '3 months',
@@ -46,8 +47,13 @@ export function AddStayForm(props: AddStayFormProps) {
         minimumLengthOfStay: +parseStayLength(data.minimumLengthOfStay),
         reservationPeriod: +parseReservationPeriod(data.reservationPeriod),
       };
-      await StayApi.create(preparedData, accessToken);
-      toast.success('Stay is created');
+      if (props.stay) {
+        await StayApi.update(props.stay.id, preparedData, accessToken);
+        toast.success('Stay is updated');
+      } else {
+        await StayApi.create(preparedData, accessToken);
+        toast.success('Stay is created');
+      }
       navigate('/');
     } catch (errors: unknown) {
       if (
@@ -68,12 +74,11 @@ export function AddStayForm(props: AddStayFormProps) {
     }
   });
 
-  /* Markup */
   return (
     <FormProvider {...methods}>
       <Box as="form" onSubmit={onSubmit}>
         <Heading as="h1" size="lg" mb={6}>
-          Add a Stay
+          {props.stay ? 'Update a Stay' : 'Add a Stay'}
         </Heading>
         <VStack spacing={4} mb={6}>
           <TitleField />
@@ -98,4 +103,4 @@ export function AddStayForm(props: AddStayFormProps) {
   );
 }
 
-export default AddStayForm;
+export default StayForm;

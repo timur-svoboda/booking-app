@@ -10,7 +10,10 @@ import {
 } from 'class-validator';
 import { Transform, TransformFnParams, Type } from 'class-transformer';
 import { CreateStayDto as ICreateStayDto } from '@booking-app/shared/dtos';
-import { TEMP_IMAGES_BUCKET_ID } from '@booking-app/api/cloud-storage';
+import {
+  IMAGES_BUCKET_ID,
+  TEMP_IMAGES_BUCKET_ID,
+} from '@booking-app/api/cloud-storage';
 
 export class CreateStayDto implements ICreateStayDto {
   @Transform(({ value }: TransformFnParams) => value?.trim())
@@ -33,8 +36,8 @@ export class CreateStayDto implements ICreateStayDto {
     message: 'The number of images must be lower than or equals to 10',
   })
   @ValidateNested()
-  @Type(() => StayImage)
-  images: StayImage[];
+  @Type(() => TempStayImage)
+  images: TempStayImage[];
 
   @IsPositive()
   pricePerNight: ICreateStayDto['pricePerNight'];
@@ -48,14 +51,22 @@ export class CreateStayDto implements ICreateStayDto {
   reservationPeriod?: ICreateStayDto['reservationPeriod'];
 }
 
-class StayImage {
+class TempStayImage {
   @Transform(({ value }: TransformFnParams) => value?.trim())
   @Matches(
     new RegExp(
-      `^https:\/\/storage.googleapis.com\/${TEMP_IMAGES_BUCKET_ID}\/.*\.webp$`
+      `^https:\/\/storage.googleapis.com\/(${TEMP_IMAGES_BUCKET_ID}|${IMAGES_BUCKET_ID})\/.*\.webp$`
     )
   )
-  url: ICreateStayDto['images'][number]['url'];
+  mainUrl: ICreateStayDto['images'][number]['mainUrl'];
+
+  @Transform(({ value }: TransformFnParams) => value?.trim())
+  @Matches(
+    new RegExp(
+      `^https:\/\/storage.googleapis.com\/(${TEMP_IMAGES_BUCKET_ID}|${IMAGES_BUCKET_ID})\/.*\.webp$`
+    )
+  )
+  thumbnailUrl: ICreateStayDto['images'][number]['thumbnailUrl'];
 
   @Transform(({ value }: TransformFnParams) => value?.trim())
   @Length(0, 100, {

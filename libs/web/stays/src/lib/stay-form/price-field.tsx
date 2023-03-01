@@ -23,7 +23,9 @@ export const parsePrice = (value: string) => value.replace(/^\$/, '');
 export function PriceField(props: PriceFieldProps) {
   const { register, formState } = useFormContext<StayFormData>();
   const registerProps = register('pricePerNight');
-  const [value, setValue] = React.useState<string>('100');
+  const [value, setValue] = React.useState<string>(
+    parsePrice(formState.defaultValues?.pricePerNight || '')
+  );
   React.useEffect(() => {
     registerProps.onChange({ target: registerProps.ref });
   }, [value]);

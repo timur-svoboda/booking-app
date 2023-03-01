@@ -17,7 +17,8 @@ export class StayDto implements IStayDto {
     this.title = stayDoc.title;
     this.description = stayDoc.description;
     this.images = stayDoc.images.map((image) => ({
-      url: image.url,
+      mainUrl: image.mainUrl,
+      thumbnailUrl: image.thumbnailUrl,
       description: image.description,
     }));
     this.pricePerNight = stayDoc.pricePerNight;
