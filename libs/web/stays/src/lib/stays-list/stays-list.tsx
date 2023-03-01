@@ -28,6 +28,7 @@ export function StaysList(props: StaysListProps) {
   const [hasNextPage, setHasNextPage] = React.useState<boolean>(true);
   const [error, setError] = React.useState<boolean>(false);
   const [skip, setSkip] = React.useState<number>(0);
+  const { getAccessTokenSilently } = useAuth0();
   const onLoadMore = React.useCallback(async () => {
     try {
       setLoading(true);
@@ -56,6 +57,20 @@ export function StaysList(props: StaysListProps) {
     disabled: error,
     rootMargin: '0px 0px 400px 0px',
   });
+  const onRemove = React.useCallback(
+    async (stayId: string) => {
+      try {
+        const accessToken = await getAccessTokenSilently();
+        await StayApi.delete(stayId, accessToken);
+        toast.success('Stay is deleted');
+        setSkip(skip - 1);
+        setStays(stays.filter((stay) => stay.id !== stayId));
+      } catch (error: unknown) {
+        toast.error('Unknown error. Try again later');
+      }
+    },
+    [getAccessTokenSilently, setSkip, skip, setStays, stays]
+  );
 
   if (!hasNextPage && stays.length === 0) {
     return (
@@ -72,8 +87,8 @@ export function StaysList(props: StaysListProps) {
         gap={6}
       >
         {stays.map((stay) => (
-          <GridItem width="100%">
-            <StayCard stay={stay} own={props.own} />
+          <GridItem key={stay.id} width="100%">
+            <StayCard stay={stay} own={props.own} onRemove={onRemove} />
           </GridItem>
         ))}
       </Grid>
