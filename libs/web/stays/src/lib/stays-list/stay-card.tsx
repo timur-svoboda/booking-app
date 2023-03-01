@@ -56,7 +56,7 @@ export function StayCard(props: StayCardProps) {
       >
         <CardBody>
           <Box position="relative">
-            <Link to={`stays/${props.stay.id}`}>
+            <Link to={`/stays/${props.stay.id}`}>
               <Image
                 src={props.stay.images[0].mainUrl}
                 alt={props.stay.images[0].description}
