@@ -31,6 +31,7 @@
     "react-dom": "18.2.0",
     "react-dropzone": "14.2.3",
     "react-hook-form": "7.43.1",
+    "react-infinite-scroll-hook": "4.1.1",
     "react-router-dom": "6.4.3",
     "react-textarea-autosize": "8.4.0",
     "react-toastify": "9.1.1",

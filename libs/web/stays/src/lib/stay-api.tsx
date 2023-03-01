@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   CreateStayDto,
+  GetManyDto,
   StayDto,
   StayImagesUrlsDto,
 } from '@booking-app/shared/dtos';
@@ -16,6 +17,10 @@ export class StayApi {
 
   static getOne(id: string) {
     return axios.get<StayDto>(`/api/stays/${id}`);
+  }
+
+  static getMany(getManyDto?: GetManyDto) {
+    return axios.get<StayDto[]>('/api/stays', { params: getManyDto });
   }
 
   static update(id: string, updateStayDto: CreateStayDto, accessToken: string) {
