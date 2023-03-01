@@ -2,6 +2,7 @@ import { StayDto } from '@booking-app/shared/dtos';
 import {
   Box,
   Button,
+  ButtonGroup,
   Card,
   CardBody,
   CardFooter,
@@ -17,6 +18,7 @@ import { Link } from 'react-router-dom';
 /* eslint-disable-next-line */
 export interface StayCardProps {
   stay: StayDto;
+  own?: boolean;
 }
 
 export function StayCard(props: StayCardProps) {
@@ -57,9 +59,20 @@ export function StayCard(props: StayCardProps) {
         </Stack>
       </CardBody>
       <CardFooter>
-        <Link to={`stays/${props.stay.id}`}>
-          <Button colorScheme="teal">View Details</Button>
-        </Link>
+        <ButtonGroup>
+          <Link to={`/stays/${props.stay.id}`}>
+            <Button as="span" colorScheme="teal">
+              View Details
+            </Button>
+          </Link>
+          {props.own && (
+            <Link to={`/stays/edit/${props.stay.id}`}>
+              <Button as="span" colorScheme="teal" variant="outline">
+                Edit
+              </Button>
+            </Link>
+          )}
+        </ButtonGroup>
       </CardFooter>
     </Card>
   );

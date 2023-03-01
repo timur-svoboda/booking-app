@@ -21,6 +21,9 @@ export function App() {
         <Route path="/" element={<StaysListPage />} />
         <Route path="stays">
           <Route element={<AuthRequired />}>
+            <Route path="own" element={<StaysListPage own />} />
+          </Route>
+          <Route element={<AuthRequired />}>
             <Route path="add-new" element={<AddStayPage />} />
           </Route>
           <Route element={<AuthRequired />}>

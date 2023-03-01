@@ -2,7 +2,7 @@ import { Container, Flex } from '@chakra-ui/layout';
 import { Box } from '@chakra-ui/react';
 import { AuthButtons } from '@booking-app/web/auth';
 import { useAuth0 } from '@auth0/auth0-react';
-import { AddStayPageLink, EditStayPageLink } from '@booking-app/web/stays';
+import { AddStayPageLink, OwnStaysListPageLink } from '@booking-app/web/stays';
 
 /* eslint-disable-next-line */
 export interface AppBarProps {}
@@ -15,11 +15,7 @@ export function AppBar(props: AppBarProps) {
       <Container maxW="100%">
         <Flex justifyContent="flex-end" pt={2} pb={2}>
           <Box pr={2}>{isAuthenticated && <AddStayPageLink />}</Box>
-          <Box pr={2}>
-            {isAuthenticated && (
-              <EditStayPageLink id="63ff2d4233ce6575958d6fd0" />
-            )}
-          </Box>
+          <Box pr={2}>{isAuthenticated && <OwnStaysListPageLink />}</Box>
           <AuthButtons />
         </Flex>
       </Container>

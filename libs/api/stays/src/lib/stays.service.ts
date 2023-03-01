@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import path from 'path';
 import * as uuid from 'uuid';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { Storage } from '@google-cloud/storage';
 import {
   Inject,
@@ -47,8 +47,12 @@ export class StaysService {
   }
 
   getMany(getManyDto: GetManyDto) {
+    const filter: FilterQuery<StayDocument> = {};
+    if (getManyDto.hostId) {
+      filter.hostId = getManyDto.hostId;
+    }
     return this.stayModel
-      .find({})
+      .find(filter)
       .skip(+getManyDto.skip || 0)
       .limit(+getManyDto.limit || 5);
   }

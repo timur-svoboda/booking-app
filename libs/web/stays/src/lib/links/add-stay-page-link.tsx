@@ -6,7 +6,7 @@ export interface AddStayPageLinkProps {}
 
 export function AddStayPageLink(props: AddStayPageLinkProps) {
   return (
-    <Link to="stays/add-new">
+    <Link to="/stays/add-new">
       <Button as="span" colorScheme="teal" variant="ghost">
         Add Stay
       </Button>

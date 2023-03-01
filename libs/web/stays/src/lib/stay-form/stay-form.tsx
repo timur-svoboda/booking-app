@@ -54,7 +54,7 @@ export function StayForm(props: StayFormProps) {
         await StayApi.create(preparedData, accessToken);
         toast.success('Stay is created');
       }
-      navigate('/');
+      navigate('/stays/own');
     } catch (errors: unknown) {
       if (
         hasResponse(errors) &&

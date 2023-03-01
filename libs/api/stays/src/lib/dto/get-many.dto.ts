@@ -1,4 +1,4 @@
-import { IsOptional, Validate } from 'class-validator';
+import { IsOptional, IsString, Validate } from 'class-validator';
 import { GetManyDto as IGetManyDto } from '@booking-app/shared/dtos';
 import {
   IsNonNegativeIntegerString,
@@ -8,9 +8,13 @@ import {
 export class GetManyDto implements IGetManyDto {
   @IsOptional()
   @Validate(IsPositiveIntegerString)
-  limit: string;
+  limit?: string;
 
   @IsOptional()
   @Validate(IsNonNegativeIntegerString)
-  skip: string;
+  skip?: string;
+
+  @IsOptional()
+  @IsString()
+  hostId?: string;
 }
