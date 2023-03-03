@@ -86,6 +86,21 @@ export class StaysService {
     if (stayDocument.hostId !== data.userId) {
       throw new UnauthorizedException();
     }
+    await Promise.all(
+      stayDocument.images.map(async (image) => {
+        const imagesBucket = this.storage.bucket(IMAGES_BUCKET_ID);
+        const mainImageFile = imagesBucket.file(path.basename(image.mainUrl));
+        if (await mainImageFile.exists()) {
+          await mainImageFile.delete();
+        }
+        const thumbnailImageFile = imagesBucket.file(
+          path.basename(image.thumbnailUrl)
+        );
+        if (await thumbnailImageFile.exists()) {
+          await thumbnailImageFile.delete();
+        }
+      })
+    );
     return this.stayModel.findByIdAndDelete(stayId);
   }
 
