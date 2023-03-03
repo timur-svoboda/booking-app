@@ -17,12 +17,14 @@
     "paths": {
       "@booking-app/api/auth": ["libs/api/auth/src/index.ts"],
       "@booking-app/api/cloud-storage": ["libs/api/cloud-storage/src/index.ts"],
+      "@booking-app/api/reservations": ["libs/api/reservations/src/index.ts"],
       "@booking-app/api/stays": ["libs/api/stays/src/index.ts"],
       "@booking-app/api/validation": ["libs/api/validation/src/index.ts"],
       "@booking-app/shared/dtos": ["libs/shared/dtos/src/index.ts"],
       "@booking-app/web/app-bar": ["libs/web/app-bar/src/index.ts"],
       "@booking-app/web/auth": ["libs/web/auth/src/index.ts"],
       "@booking-app/web/forms": ["libs/web/forms/src/index.ts"],
+      "@booking-app/web/reservations": ["libs/web/reservations/src/index.ts"],
       "@booking-app/web/stays": ["libs/web/stays/src/index.ts"],
       "@booking-app/web/validation": ["libs/web/validation/src/index.ts"]
     }

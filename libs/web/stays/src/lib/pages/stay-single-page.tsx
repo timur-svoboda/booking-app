@@ -54,7 +54,7 @@ export function StaySinglePage(props: StaySinglePageProps) {
 
   return (
     <Box pt={8} pb={8}>
-      <Container maxW="container.md">
+      <Container maxWidth="container.xl">
         <StayDetails stay={stay} />
       </Container>
     </Box>
