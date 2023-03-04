@@ -6,4 +6,7 @@ export class GetManyReservationsDto implements IGetManyReservationsDto {
   @Validate(IsObjectId)
   @IsOptional()
   stayId!: string;
+
+  @IsOptional()
+  guestId!: string;
 }

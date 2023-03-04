@@ -5,4 +5,5 @@ export interface ReservationEntity {
   from: string;
   to: string;
   pricePerNight: number;
+  stayTitle: string;
 }
