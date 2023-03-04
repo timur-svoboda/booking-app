@@ -12,6 +12,6 @@ export class IsObjectId implements ValidatorConstraintInterface {
   }
 
   defaultMessage(args: ValidationArguments) {
-    return '($value) must be a string that contains positive integer';
+    return '$value must be a valid MongoDB ObjectId';
   }
 }

@@ -22,10 +22,10 @@ export class Stay {
   pricePerNight: number;
 
   @Prop({ default: 1 })
-  minimumLengthOfStay?: number;
+  minimumLengthOfStay: number;
 
   @Prop({ default: 3 })
-  reservationPeriod?: number;
+  reservationPeriod: number;
 }
 
 export const StaySchema = SchemaFactory.createForClass(Stay);

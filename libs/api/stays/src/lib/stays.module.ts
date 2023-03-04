@@ -14,5 +14,6 @@ import { StaysController } from './stays.controller';
   ],
   controllers: [StaysController],
   providers: [StaysService],
+  exports: [StaysService],
 })
 export class StaysModule {}

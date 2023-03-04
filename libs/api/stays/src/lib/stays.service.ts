@@ -135,6 +135,11 @@ export class StaysService {
     };
   }
 
+  async exists(stayId: string) {
+    const stayDocument = await this.stayModel.findById(stayId);
+    return stayDocument !== null;
+  }
+
   private async makeImagePermanent(url: string) {
     const destFile = this.storage
       .bucket(IMAGES_BUCKET_ID)

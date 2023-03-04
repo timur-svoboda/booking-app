@@ -49,5 +49,3 @@ export function ImageGallery(props: ImageGalleryProps) {
     </Swiper>
   );
 }
-
-export default ImageGallery;
