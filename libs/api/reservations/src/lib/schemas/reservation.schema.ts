@@ -10,6 +10,7 @@ export class Reservation {
   @Prop({ required: true }) from!: string;
   @Prop({ required: true }) to!: string;
   @Prop({ required: true }) pricePerNight!: number;
+  @Prop({ required: true }) stayTitle!: string;
 }
 
 export const ReservationSchema = SchemaFactory.createForClass(Reservation);

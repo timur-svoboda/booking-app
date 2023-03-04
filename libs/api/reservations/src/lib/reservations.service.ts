@@ -102,11 +102,12 @@ export class ReservationsService {
     return this.ReservationModel.create({
       guestId: userId,
       pricePerNight: stayDocument.pricePerNight,
+      stayTitle: stayDocument.title,
       ...createReservationDto,
     });
   }
 
-  getMany({ stayId }: GetManyReservationsDto) {
-    return this.ReservationModel.find({ stayId });
+  getMany(getManyReservationsDto: GetManyReservationsDto) {
+    return this.ReservationModel.find(getManyReservationsDto);
   }
 }

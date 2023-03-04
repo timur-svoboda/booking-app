@@ -16,7 +16,7 @@ import { toast } from 'react-toastify';
 import { Button, VStack, Text, Flex } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
-import { ReservationsApi } from '../api/reservations.api';
+import { ReservationsApi } from '../../api/reservations.api';
 import styles from './reservation-calendar.module.scss';
 
 /* eslint-disable-next-line */

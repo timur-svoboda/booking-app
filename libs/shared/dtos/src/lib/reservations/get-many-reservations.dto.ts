@@ -1,3 +1,4 @@
 export interface GetManyReservationsDto {
-  stayId: string;
+  stayId?: string;
+  guestId?: string;
 }

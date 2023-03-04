@@ -13,6 +13,7 @@ export class ReservationEntity implements IReservationEntity {
   @Expose() from!: string;
   @Expose() to!: string;
   @Expose() pricePerNight!: number;
+  @Expose() stayTitle!: string;
 
   constructor(reservationDocument: ReservationDocument) {
     Object.assign(this, reservationDocument.toJSON());
