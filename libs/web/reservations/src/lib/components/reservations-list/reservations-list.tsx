@@ -39,7 +39,7 @@ export function ReservationsList({
   return (
     <VStack alignItems="stretch" spacing="16px">
       {reservations.map((reservation) => (
-        <ReservationItem reservation={reservation} />
+        <ReservationItem key={reservation.id} reservation={reservation} />
       ))}
     </VStack>
   );

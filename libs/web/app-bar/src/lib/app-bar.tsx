@@ -18,9 +18,18 @@ export function AppBar(props: AppBarProps) {
           <Box pr={2}>{isAuthenticated && <AddStayPageLink />}</Box>
           <Box pr={2}>
             {isAuthenticated && (
-              <Link to="/reservations/guest">
+              <Link to="/reservations/my">
                 <Button as="span" colorScheme="teal" variant="ghost">
                   My Reservations
+                </Button>
+              </Link>
+            )}
+          </Box>
+          <Box pr={2}>
+            {isAuthenticated && (
+              <Link to="/reservations/my-stays">
+                <Button as="span" colorScheme="teal" variant="ghost">
+                  My Stays Reservations
                 </Button>
               </Link>
             )}

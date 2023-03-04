@@ -12,7 +12,10 @@ import {
   StaysListPage,
 } from '@booking-app/web/stays';
 import { AuthRequired } from '@booking-app/web/auth';
-import { GuestReservationsListPage } from '@booking-app/web/reservations';
+import {
+  GuestReservationsListPage,
+  HostReservationsListPage,
+} from '@booking-app/web/reservations';
 
 export function App() {
   return (
@@ -37,8 +40,16 @@ export function App() {
         </Route>
 
         {/* Reservations */}
-        <Route path="reservations" element={<AuthRequired />}>
-          <Route path="guest" element={<GuestReservationsListPage />}></Route>
+        <Route path="reservations">
+          <Route element={<AuthRequired />}>
+            <Route path="my" element={<GuestReservationsListPage />}></Route>
+          </Route>
+          <Route element={<AuthRequired />}>
+            <Route
+              path="my-stays"
+              element={<HostReservationsListPage />}
+            ></Route>
+          </Route>
         </Route>
       </Routes>
 
