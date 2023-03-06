@@ -14,7 +14,7 @@ async function bootstrap() {
 
   const globalPrefix = 'api';
   app.setGlobalPrefix(globalPrefix);
-
+  app.enableCors({ origin: process.env.WEB_URL });
   app.useGlobalPipes(new ValidationPipe({ exceptionFactory }));
 
   const port = process.env.PORT || 3333;
