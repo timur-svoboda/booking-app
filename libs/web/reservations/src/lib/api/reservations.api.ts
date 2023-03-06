@@ -26,4 +26,15 @@ export class ReservationsApi {
       params: getManyReservationsDto,
     });
   }
+
+  static delete(reservationId: string, accessToken: string) {
+    return axios.delete<ReservationEntity>(
+      `/api/reservations/${reservationId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+  }
 }
