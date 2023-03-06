@@ -7,8 +7,10 @@ import {
 } from '@booking-app/shared/dtos';
 
 export class StayApi {
+  private static baseUrl: string = process.env.NX_API_URL || '';
+
   static create(createStayDto: CreateStayDto, accessToken: string) {
-    return axios.post<StayDto>('/api/stays', createStayDto, {
+    return axios.post<StayDto>(`${StayApi.baseUrl}/api/stays`, createStayDto, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -16,19 +18,25 @@ export class StayApi {
   }
 
   static getOne(id: string) {
-    return axios.get<StayDto>(`/api/stays/${id}`);
+    return axios.get<StayDto>(`${StayApi.baseUrl}/api/stays/${id}`);
   }
 
   static getMany(getManyDto?: GetManyDto) {
-    return axios.get<StayDto[]>('/api/stays', { params: getManyDto });
+    return axios.get<StayDto[]>(`${StayApi.baseUrl}/api/stays`, {
+      params: getManyDto,
+    });
   }
 
   static update(id: string, updateStayDto: CreateStayDto, accessToken: string) {
-    return axios.patch<StayDto>(`/api/stays/${id}`, updateStayDto, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    return axios.patch<StayDto>(
+      `${StayApi.baseUrl}/api/stays/${id}`,
+      updateStayDto,
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
   }
 
   static delete(stayId: string, accessToken: string) {

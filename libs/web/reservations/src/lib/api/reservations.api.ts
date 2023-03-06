@@ -5,13 +5,17 @@ import {
 } from '@booking-app/shared/dtos';
 import axios from 'axios';
 
+
+
 export class ReservationsApi {
+  private static baseUrl: string = process.env.NX_API_URL || '';
+
   static create(
     createReservationDto: CreateReservationDto,
     accessToken: string
   ) {
     return axios.post<ReservationEntity>(
-      '/api/reservations',
+      `${ReservationsApi.baseUrl}/api/reservations`,
       createReservationDto,
       {
         headers: {
@@ -22,14 +26,17 @@ export class ReservationsApi {
   }
 
   static getMany(getManyReservationsDto: GetManyReservationsDto) {
-    return axios.get<ReservationEntity[]>('/api/reservations', {
-      params: getManyReservationsDto,
-    });
+    return axios.get<ReservationEntity[]>(
+      `${ReservationsApi.baseUrl}/api/reservations`,
+      {
+        params: getManyReservationsDto,
+      }
+    );
   }
 
   static delete(reservationId: string, accessToken: string) {
     return axios.delete<ReservationEntity>(
-      `/api/reservations/${reservationId}`,
+      `${ReservationsApi.baseUrl}/api/reservations/${reservationId}`,
       {
         headers: {
           Authorization: `Bearer ${accessToken}`,
