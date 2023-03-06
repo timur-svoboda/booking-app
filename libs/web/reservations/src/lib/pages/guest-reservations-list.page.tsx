@@ -42,6 +42,13 @@ export function GuestReservationsListPage(
     fetchReservations();
   }, []);
 
+  // Callback to remove canceled reservation from reservations state
+  const onCancel = (reservationId: string) => {
+    setReservations(
+      reservations.filter((reservation) => reservationId !== reservation.id)
+    );
+  };
+
   return (
     <Box pt={8} pb={8}>
       <Container maxWidth="container.lg">
@@ -49,6 +56,8 @@ export function GuestReservationsListPage(
           reservations={reservations}
           loading={loading}
           error={error}
+          own
+          onCancel={onCancel}
         />
       </Container>
     </Box>
