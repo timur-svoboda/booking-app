@@ -29,7 +29,7 @@ export function App() {
         <Route path="stays">
           <Route path=":stayId" element={<StaySinglePage />} />
           <Route element={<AuthRequired />}>
-            <Route path="own" element={<StaysListPage own />} />
+            <Route path="my" element={<StaysListPage own />} />
           </Route>
           <Route element={<AuthRequired />}>
             <Route path="add-new" element={<AddStayPage />} />
