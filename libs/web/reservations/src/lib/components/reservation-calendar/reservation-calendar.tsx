@@ -129,6 +129,12 @@ export function ReservationCalendar(props: ReservationCalendarProps) {
     }
   }, [reservationRange]);
 
+  // Hide component if a user is not authenticated
+  const { isAuthenticated } = useAuth0();
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <VStack spacing={4} alignItems="stretch">
       <ReactCalendar
