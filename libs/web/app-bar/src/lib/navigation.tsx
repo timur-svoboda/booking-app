@@ -52,7 +52,7 @@ export function Navigation(props: NavigationProps) {
   return (
     <Stack direction={{ base: 'column', lg: 'row' }} spacing="8px">
       {allowedNavigationLinks.map((navigationLink) => (
-        <Link to={navigationLink.url}>
+        <Link key={navigationLink.url} to={navigationLink.url}>
           <Button
             as="span"
             colorScheme="teal"
