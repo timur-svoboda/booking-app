@@ -18,6 +18,11 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth0 } from '@auth0/auth0-react';
 import { ReservationsApi } from '../../api/reservations.api';
 import styles from './reservation-calendar.module.scss';
+import {
+  hasData,
+  hasResponse,
+  isBadRequest,
+} from '@booking-app/web/validation';
 
 /* eslint-disable-next-line */
 export interface ReservationCalendarProps {
@@ -123,8 +128,16 @@ export function ReservationCalendar(props: ReservationCalendarProps) {
         await ReservationsApi.create(createReservationDto, accessToken);
         toast.success('Reservation is created');
         navigate('/');
-      } catch {
-        toast.error('Unknown error. Try again');
+      } catch (error: unknown) {
+        if (
+          hasResponse(error) &&
+          hasData(error.response) &&
+          isBadRequest(error.response.data)
+        ) {
+          toast.error(error.response.data.message);
+        } else {
+          toast.error('Unknown error. Try again');
+        }
       }
     }
   }, [reservationRange]);

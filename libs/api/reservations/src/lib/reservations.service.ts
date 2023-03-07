@@ -57,13 +57,6 @@ export class ReservationsService {
       );
     }
 
-    // Check a conflict with the minimum length of stay
-    if (differenceInDays(toDate, fromDate) < stayDocument.minimumLengthOfStay) {
-      throw new BadRequestException(
-        `The difference in days between the date of departure and the date of arrival must be greater than or equal to the minimum length of stay`
-      );
-    }
-
     // Check a conflict with the reservation period
     const reservationDeadlineDate = addMonths(
       today,
@@ -98,6 +91,13 @@ export class ReservationsService {
         );
       }
     });
+
+    // Check a conflict with the minimum length of stay
+    if (differenceInDays(toDate, fromDate) < stayDocument.minimumLengthOfStay) {
+      throw new BadRequestException(
+        `The length of stay must be greater than or equal to ${stayDocument.minimumLengthOfStay} day(s)`
+      );
+    }
 
     // Add reservation data in the database
     return this.ReservationModel.create({
