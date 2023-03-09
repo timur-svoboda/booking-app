@@ -43,13 +43,6 @@ export class ReservationsService {
     const toDate = startOfDay(new Date(createReservationDto.to));
     const today = startOfDay(new Date());
 
-    // Check that fromDate is not before today
-    if (!isAfter(fromDate, today) && !isEqual(fromDate, today)) {
-      throw new BadRequestException(
-        `The date of arrival must be after today or be today`
-      );
-    }
-
     // Check that formDate is before toDate
     if (!isBefore(fromDate, toDate)) {
       throw new BadRequestException(
