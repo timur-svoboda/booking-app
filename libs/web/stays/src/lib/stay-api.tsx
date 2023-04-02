@@ -40,7 +40,7 @@ export class StayApi {
   }
 
   static delete(stayId: string, accessToken: string) {
-    return axios.delete<StayDto>(`/api/stays/${stayId}`, {
+    return axios.delete<StayDto>(`${StayApi.baseUrl}/api/stays/${stayId}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
@@ -50,7 +50,7 @@ export class StayApi {
   static createImage(file: File, accessToken: string) {
     const formData = new FormData();
     formData.append('file', file);
-    return axios.post<StayImagesUrlsDto>('/api/stays/images', formData, {
+    return axios.post<StayImagesUrlsDto>(`${StayApi.baseUrl}/api/stays/images`, formData, {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },

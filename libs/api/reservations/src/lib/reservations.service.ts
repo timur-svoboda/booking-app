@@ -43,24 +43,10 @@ export class ReservationsService {
     const toDate = startOfDay(new Date(createReservationDto.to));
     const today = startOfDay(new Date());
 
-    // Check that fromDate is not before today
-    if (!isAfter(fromDate, today) && !isEqual(fromDate, today)) {
-      throw new BadRequestException(
-        `The date of arrival must be after today or be today`
-      );
-    }
-
     // Check that formDate is before toDate
     if (!isBefore(fromDate, toDate)) {
       throw new BadRequestException(
         `The date of arrival must be before the date of departure`
-      );
-    }
-
-    // Check a conflict with the minimum length of stay
-    if (differenceInDays(toDate, fromDate) < stayDocument.minimumLengthOfStay) {
-      throw new BadRequestException(
-        `The difference in days between the date of departure and the date of arrival must be greater than or equal to the minimum length of stay`
       );
     }
 
@@ -98,6 +84,13 @@ export class ReservationsService {
         );
       }
     });
+
+    // Check a conflict with the minimum length of stay
+    if (differenceInDays(toDate, fromDate) < stayDocument.minimumLengthOfStay) {
+      throw new BadRequestException(
+        `The length of stay must be greater than or equal to ${stayDocument.minimumLengthOfStay} day(s)`
+      );
+    }
 
     // Add reservation data in the database
     return this.ReservationModel.create({
